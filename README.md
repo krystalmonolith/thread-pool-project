@@ -1,1 +1,1 @@
-See [rx-thread-pool/README](rx-thread-pool/README)
+See [rx-thread-pool/README.md](rx-thread-pool/README.md)
