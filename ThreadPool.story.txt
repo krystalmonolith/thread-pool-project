@@ -1,0 +1,23 @@
+Create a multi-threading framework library for Node.js. 
+The framework will be written in Typescript, and it will use RxJS v7 Observables, and will be packaged as a npm package. 
+The framework will be comprised of multiple Typescript classes.
+The framework will implement a pool of threads that read and execute tasks supplied by one or more FIFO queues.
+
+The classes will be named: ThreadPool, ThreadQueue, AbstractThreadTask. 
+
+An AbstractThreadTask class is a generic abstract container class for a callback function with signature "threadFunc<T, I extends Observable<T>, V, R extends Observable<V>>(I i, threadId: number):R" .
+The threadFunc callback is the code that will be executed individually by each thread in the thread pool.
+The ThreadTask class will supply an "execute(threadId: number):void" method that is used by the thread pool to invoke the threadFunc.
+
+Each ThreadQueue class will provide a FIFO queue of ThreadTask class instances.
+
+The ThreadPool class will support N execution threads where N is defined by the Node.js API os.availableParallelism(). 
+When the ThreadPool class is constructed it must be supplied a non zero length array of ThreadQueue class instance(s) called threadQueueArray.
+The Threadpool.start method will iterate through threadQueueArray starting threads for each AbstractThreadTask in every queue contained in the threadQueueArray by concatenating the arrays into a list.
+If the length of the list of AbstractThreadTask is zero then ThreadPool.start immediately returns null.
+If the length of the list is greater than zero ThreadPool.start creates threads for each AbstractThreadTask in the resultant list.
+When all the threads from that list have been started ThreadPool.start returns a RxJS Observable that will asynchronously emit the thread completion results for each thread by 
+subscribing the the threadProc's returned observable an re-emitting the value on the observable returned from Threadproc.start.
+When ThreadPool.start invokes the callback function via AbstractThreadTask.execute it will pass an integer number that is a unique ID for each thread started, which is in turn passed to the threadFunc callback via the threadId parameter.
+
+
