@@ -4,9 +4,10 @@
   "description": "Reactive Thread Pool Framework",
   "main": "dist/index.js",
   "scripts": {
-    "postinstall": "cd node-thread-framework && npm install",
-    "build": "cd node-thread-framework && npm run build",
-    "test": "cd node-thread-framework && npm test"
+    "postinstall": "cd rx-thread-pool && npm install",
+    "build": "cd rx-thread-pool && npm run build",
+    "test": "cd rx-thread-pool && npm test",
+    "test-advanced": "cd rx-thread-pool && npm run test-advanced"
   },
   "private": true
 }

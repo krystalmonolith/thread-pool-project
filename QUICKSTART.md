@@ -1,11 +1,15 @@
-# Quick Start Guide - Node.js Multi-Threading Framework
+# Quick Start Guide - @krystalmonolith/rx-thread-pool
 
 ## Installation
 
-Extract the tarball and install dependencies:
+```bash
+npm install @krystalmonolith/rx-thread-pool
+```
+
+Or extract the source tarball and install dependencies:
 
 ```bash
-tar -xzf node-thread-framework.tar.gz -C my-project
+tar -xzf rx-thread-pool.tar.gz -C my-project
 cd my-project
 npm install
 ```
@@ -32,7 +36,7 @@ node dist/advanced-example.js
 
 ```typescript
 import { Observable, of, map } from 'rxjs';
-import { ThreadTask, ThreadQueue, ThreadPool } from '@yourorg/node-thread-framework';
+import { ThreadTask, ThreadQueue, ThreadPool } from '@krystalmonolith/rx-thread-pool';
 
 // 1. Create a thread task
 const myTask = new ThreadTask(

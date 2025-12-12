@@ -6,13 +6,17 @@ if (parentPort) {
   const { functionString, inputData, threadId } = workerData;
 
   try {
-    // Replace TypeScript compiled rxjs_1 references with actual rxjs module
+    // Replace TypeScript compiled rxjs references with actual rxjs module
     // This handles the case where functions are serialized after TypeScript compilation
     let processedFunctionString = functionString;
     
     // Replace all rxjs module references (rxjs_1, rxjs_2, etc.)
     processedFunctionString = processedFunctionString.replace(/rxjs_\d+\./g, 'rxjs.');
     processedFunctionString = processedFunctionString.replace(/operators_\d+\./g, 'operators.');
+    
+    // Replace import_rxjs, import_rxjs2, etc. patterns (alternative TypeScript compilation)
+    processedFunctionString = processedFunctionString.replace(/import_rxjs\d*/g, 'rxjs');
+    processedFunctionString = processedFunctionString.replace(/import_operators\d*/g, 'operators');
     
     // Create a context with rxjs available
     const context = {

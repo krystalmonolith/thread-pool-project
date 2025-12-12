@@ -1,6 +1,6 @@
-# Node.js Multi-Threading Framework
+# @krystalmonolith/rx-thread-pool
 
-A TypeScript-based framework for managing worker thread pools with RxJS Observables. This library provides a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
+A multi-threading framework melding Worker Threads and RxJS Observables. This library provides a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
 
 ## Features
 
@@ -14,7 +14,7 @@ A TypeScript-based framework for managing worker thread pools with RxJS Observab
 ## Installation
 
 ```bash
-npm install @yourorg/node-thread-framework
+npm install @krystalmonolith/rx-thread-pool
 ```
 
 ## Requirements
@@ -114,7 +114,7 @@ threadFunc<T, I extends Observable<T>, V, R extends Observable<V>>(
 
 ```typescript
 import { Observable, of, map } from 'rxjs';
-import { ThreadTask, ThreadQueue, ThreadPool } from '@yourorg/node-thread-framework';
+import { ThreadTask, ThreadQueue, ThreadPool } from '@krystalmonolith/rx-thread-pool';
 
 // Create a task with a computation function
 const computeTask = new ThreadTask(

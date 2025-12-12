@@ -1,13 +1,14 @@
 {
   "name": "@krystalmonolith/rx-thread-pool",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A multi-threading framework melding Worker Threads and RxJS Observables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && copy src\\worker.js dist\\worker.js",
+    "build": "tsc && shx cp src/worker.js dist/worker.js",
     "test": "node dist/example.js",
-    "clean": "rm -rf dist"
+    "test-advanced": "node dist/advanced-example.js",
+    "clean": "rimraf dist"
   },
   "keywords": [
     "multithreading",
@@ -25,7 +26,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "rimraf": "^6.1.2",
+    "shx": "^0.4.0"
   },
   "engines": {
     "node": ">=16.0.0"
