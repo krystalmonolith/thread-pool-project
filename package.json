@@ -1,0 +1,12 @@
+{
+  "name": "@krystalmonolith/thread-pool-project",
+  "version": "1.0.0",
+  "description": "Reactive Thread Pool Framework",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "cd node-thread-framework && npm install",
+    "build": "cd node-thread-framework && npm run build",
+    "test": "cd node-thread-framework && npm test"
+  },
+  "private": true
+}

@@ -1,20 +1,21 @@
 {
-  "name": "@yourorg/node-thread-framework",
+  "name": "@krystalmonolith/rx-thread-pool",
   "version": "1.0.0",
-  "description": "A multi-threading framework for Node.js using Worker Threads and RxJS Observables",
+  "description": "A multi-threading framework melding Worker Threads and RxJS Observables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && cp src/worker.js dist/worker.js",
+    "build": "tsc && copy src\\worker.js dist\\worker.js",
     "test": "node dist/example.js",
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "nodejs",
     "multithreading",
     "worker-threads",
     "rxjs",
+    "threading",
     "thread-pool",
+    "thread-queue",
     "typescript"
   ],
   "author": "",
