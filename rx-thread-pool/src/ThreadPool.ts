@@ -1,9 +1,10 @@
-import { Worker } from 'worker_threads';
-import { Observable, merge, Subject } from 'rxjs';
+import {Worker} from 'worker_threads';
+import {merge, Observable} from 'rxjs';
 import * as os from 'os';
 import * as path from 'path';
-import { ThreadQueue } from './ThreadQueue';
-import { AbstractThreadTask } from './AbstractThreadTask';
+import {ThreadQueue} from './ThreadQueue';
+import {AbstractThreadTask} from './AbstractThreadTask';
+import {ts} from "./time-stamp";
 
 /**
  * Result emitted by the ThreadPool
@@ -21,7 +22,7 @@ export interface ThreadResult<V = any> {
 export class ThreadPool {
   private readonly maxThreads: number;
   private readonly threadQueueArray: ThreadQueue[];
-  private activeWorkers: Map<number, Worker>;
+  private readonly activeWorkers: Map<number, Worker>;
   private nextThreadId: number;
 
   /**
@@ -84,6 +85,7 @@ export class ThreadPool {
       
       // Serialize the thread function to string
       const functionString = task.getThreadFunc().toString();
+      console.log(ts() + "functionString: " + functionString);
       
       // Get input data from the task's input observable
       const inputData: any[] = [];
@@ -91,6 +93,7 @@ export class ThreadPool {
         next: (value) => inputData.push(value),
         complete: () => {
           // Once input is collected, create and start the worker
+          console.log(`${ts()}worker.inputData[${threadId}]: ${JSON.stringify(inputData)}`);
           const worker = new Worker(workerPath, {
             workerData: {
               functionString,
@@ -98,6 +101,7 @@ export class ThreadPool {
               threadId
             }
           });
+          console.log(ts() + `worker.started[${threadId}]`);
 
           this.activeWorkers.set(threadId, worker);
 

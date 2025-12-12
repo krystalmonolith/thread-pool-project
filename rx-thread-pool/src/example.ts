@@ -1,5 +1,6 @@
 import { Observable, of, map, delay } from 'rxjs';
 import { ThreadTask, ThreadQueue, ThreadPool } from './index';
+import {ts} from "./time-stamp";
 
 // Example 1: Simple computational task
 const computeTask = new ThreadTask(
@@ -19,7 +20,7 @@ const computeTask = new ThreadTask(
       })
     );
   },
-  of(1000000, 2000000, 3000000)
+  of(1000000, 2000000, 100000000)
 );
 
 // Example 2: Data processing task
@@ -63,8 +64,8 @@ queue2.enqueue(asyncTask);
 // Create thread pool with multiple queues
 const threadPool = new ThreadPool([queue1, queue2]);
 
-console.log(`Max threads available: ${threadPool.getMaxThreads()}`);
-console.log('Starting thread pool...\n');
+console.log(`${ts()}Max threads available: ${threadPool.getMaxThreads()}`);
+console.log(`${ts()}Starting thread pool...\n`);
 
 // Start execution
 const result$ = threadPool.start();
@@ -73,21 +74,21 @@ if (result$) {
   result$.subscribe({
     next: (result) => {
       if (result.error) {
-        console.error(`Thread ${result.threadId} error:`, result.error);
+        console.error(`${ts()}Thread ${result.threadId} error:`, result.error);
       } else if (result.completed) {
-        console.log(`Thread ${result.threadId} completed`);
+        console.log(`${ts()}Thread ${result.threadId} completed`);
       } else {
-        console.log(`Thread ${result.threadId} result:`, result.value);
+        console.log(`${ts()}Thread ${result.threadId} result:`, result.value);
       }
     },
     error: (error) => {
-      console.error('Pool error:', error);
+      console.error(`${ts()}Pool error:`, error);
     },
     complete: () => {
-      console.log('\nAll threads completed!');
+      console.log(`\n${ts()}All threads completed!`);
       threadPool.terminateAll();
     }
   });
 } else {
-  console.log('No tasks to execute');
+  console.log(`${ts()}No tasks to execute`);
 }

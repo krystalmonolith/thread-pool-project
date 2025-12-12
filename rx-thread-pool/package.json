@@ -6,7 +6,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc && shx cp src/worker.js dist/worker.js",
+    "pretest": "npm run build",
     "test": "node dist/example.js",
+    "pretest-advanced": "npm run build",
     "test-advanced": "node dist/advanced-example.js",
     "clean": "rimraf dist"
   },
