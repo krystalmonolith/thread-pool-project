@@ -8,7 +8,12 @@ yarn-error.log*
 /.pnp
 .pnp.js
 
+# IDE
+.idea/
 .vscode/*
+*.swp
+*.swo
+*~
 
 archive
 temp-*
