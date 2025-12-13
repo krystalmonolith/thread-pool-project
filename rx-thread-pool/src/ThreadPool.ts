@@ -65,8 +65,13 @@ export class ThreadPool {
       threadObservables.push(observable);
     }
 
-    // Merge all thread observables into one
-    return merge(...threadObservables);
+    // Up till now this has all been preparation for launching the threads...
+    // Threads are finally created here...
+    // First merge() subscribes to all the thread(s) output observable(s).
+    // Each thread actually begins execution when it's input observable completes...
+    // Merge collects all thread observable output(s) into one observable.
+    // When the observable returned by merge completes all threads have completed execution.
+    return merge(...threadObservables, this.maxThreads);
   }
 
   /**
