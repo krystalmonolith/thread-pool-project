@@ -36,18 +36,9 @@ export abstract class AbstractThreadTask<
    * @param threadFunc - The callback function to execute in the thread
    * @param input - The input observable to pass to the thread function
    */
-  constructor(threadFunc: ThreadFunc<T, I, V, R>, input: I) {
+  protected constructor(threadFunc: ThreadFunc<T, I, V, R>, input: I) {
     this.threadFunc = threadFunc;
     this.input = input;
-  }
-
-  /**
-   * Execute the thread function with the given thread ID
-   * @param threadId - Unique identifier for the thread
-   * @returns Observable that emits the results from the thread function
-   */
-  execute(threadId: number): R {
-    return this.threadFunc(this.input, threadId);
   }
 
   /**
