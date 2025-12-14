@@ -2,6 +2,11 @@
 
 A multi-threading framework melding Worker Threads and RxJS Observables. This library provides a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
 
+## Acknowledgments
+This project was developed with _significant_ assistance from [Claude](https://claude.ai) (Anthropic).
+
+*"ODNT": Old Dogs, New Tricks!*
+
 ## Features
 
 - 🚀 **Worker Thread Pool**: Automatically manages thread pool based on available CPU cores

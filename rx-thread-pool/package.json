@@ -1,7 +1,7 @@
 {
   "name": "@krystalmonolith/rx-thread-pool",
   "version": "1.0.1",
-  "description": "A multi-threading framework melding Worker Threads and RxJS Observables",
+  "description": "A TypeScript-based multi-threading framework using Worker Threads and RxJS Observables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,28 +10,45 @@
     "test": "node dist/example.js",
     "pretest-advanced": "npm run build",
     "test-advanced": "node dist/advanced-example.js",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "pretest-recursive-merge": "npm run build",
+    "test-recursive-merge": "node dist/recursive-merge-sort.test.js",
+    "pretest-recursive-tree": "npm run build",
+    "test-recursive-tree": "node dist/recursive-tree-traversal.test.js",
+    "pretest-recursive-matrix": "npm run build",
+    "test-recursive-matrix": "node dist/recursive-matrix-multiply.test.js",
+    "pretest-recursive-all": "npm run build",
+    "test-recursive-all": "node dist/run-all-recursive-tests.js"
   },
   "keywords": [
     "multithreading",
     "worker-threads",
     "rxjs",
-    "threading",
+    "observables",
+    "parallel",
+    "concurrency",
     "thread-pool",
-    "thread-queue",
     "typescript"
   ],
-  "author": "",
+  "author": "Mark Deazley <mdeazley@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krystalmonolith/thread-pool-project.git"
+  },
   "dependencies": {
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.9.3",
     "rimraf": "^6.1.2",
     "shx": "^0.4.0"
   },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "engines": {
     "node": ">=16.0.0"
   }
