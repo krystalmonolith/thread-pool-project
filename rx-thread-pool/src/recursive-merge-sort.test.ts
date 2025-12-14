@@ -39,6 +39,7 @@ function mergeSorted(left: number[], right: number[]): number[] {
 
 /**
  * Create a recursive parallel sort task
+ * Note: The thread function must be self-contained (no external closures)
  */
 function createRecursiveSortTask(
   array: number[], 
@@ -46,105 +47,119 @@ function createRecursiveSortTask(
   maxDepth: number,
   taskId: string
 ): ThreadTask {
-  return new ThreadTask(
-    (input: Observable<SortTask>, threadId: number) => {
-      return input.pipe(
-        mergeMap(async (task) => {
-          console.log(`[Depth ${task.depth}] Thread ${threadId} sorting ${task.array.length} elements (task: ${task.taskId})`);
-          
-          // Base case: sort directly when at max depth or array is small
-          if (task.depth >= task.maxDepth || task.array.length <= 1000) {
-            const sorted = [...task.array].sort((a, b) => a - b);
-            console.log(`[Depth ${task.depth}] Thread ${threadId} completed base sort of ${sorted.length} elements`);
-            return { 
-              threadId, 
-              sorted,
-              depth: task.depth,
-              taskId: task.taskId,
-              threadsCreated: 1
-            };
+  // Thread function that will be serialized - must be completely self-contained
+  const threadFunc = (input: Observable<SortTask>, threadId: number) => {
+    return input.pipe(
+      mergeMap(async (task) => {
+        // Import required modules in worker context
+        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
+        const { of } = require('rxjs');
+        const { mergeMap } = require('rxjs');
+        
+        console.log(`[Depth ${task.depth}] Thread ${threadId} sorting ${task.array.length} elements (task: ${task.taskId})`);
+        
+        // Merge sorted arrays helper (defined in worker scope)
+        function mergeSorted(left: number[], right: number[]): number[] {
+          const result: number[] = [];
+          let i = 0, j = 0;
+          while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+              result.push(left[i++]);
+            } else {
+              result.push(right[j++]);
+            }
           }
-          
-          // Recursive case: split and create new ThreadPool
-          const mid = Math.floor(task.array.length / 2);
-          const leftArray = task.array.slice(0, mid);
-          const rightArray = task.array.slice(mid);
-          
-          console.log(`[Depth ${task.depth}] Thread ${threadId} splitting: left=${leftArray.length}, right=${rightArray.length}`);
-          
-          // Create sub-tasks
-          const leftTask = createRecursiveSortTask(
-            leftArray, 
-            task.depth + 1, 
-            task.maxDepth,
-            `${task.taskId}-L`
-          );
-          const rightTask = createRecursiveSortTask(
-            rightArray, 
-            task.depth + 1, 
-            task.maxDepth,
-            `${task.taskId}-R`
-          );
-          
-          // Create new ThreadPool for this level
-          const queue = new ThreadQueue(`sort-depth-${task.depth}`);
-          queue.enqueue(leftTask);
-          queue.enqueue(rightTask);
-          
-          const pool = new ThreadPool([queue]);
-          const results$ = pool.start();
-          
-          if (!results$) {
-            throw new Error('Failed to start thread pool');
-          }
-          
-          // Collect all results
-          const allResults: SortResult[] = [];
-          
-          await new Promise<void>((resolve, reject) => {
-            results$.subscribe({
-              next: (result) => {
-                if (result.error) {
-                  console.error(`[Depth ${task.depth}] Error in sub-task:`, result.error);
-                  reject(new Error(result.error));
-                } else if (!result.completed && result.value) {
-                  allResults.push(result.value as SortResult);
-                }
-              },
-              error: reject,
-              complete: resolve
-            });
-          });
-          
-          // Extract sorted arrays
-          const sortedResults = allResults
-            .sort((a, b) => a.taskId.localeCompare(b.taskId))
-            .map(r => r.sorted);
-          
-          if (sortedResults.length !== 2) {
-            throw new Error(`Expected 2 results, got ${sortedResults.length}`);
-          }
-          
-          // Merge sorted halves
-          const merged = mergeSorted(sortedResults[0], sortedResults[1]);
-          const totalThreads = allResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
-          
-          console.log(`[Depth ${task.depth}] Thread ${threadId} merged ${merged.length} elements`);
-          
-          pool.terminateAll();
-          
+          return result.concat(left.slice(i)).concat(right.slice(j));
+        }
+        
+        // Base case: sort directly when at max depth or array is small
+        if (task.depth >= task.maxDepth || task.array.length <= 1000) {
+          const sorted = [...task.array].sort((a, b) => a - b);
+          console.log(`[Depth ${task.depth}] Thread ${threadId} completed base sort of ${sorted.length} elements`);
           return { 
             threadId, 
-            sorted: merged, 
+            sorted,
             depth: task.depth,
             taskId: task.taskId,
-            threadsCreated: totalThreads
+            threadsCreated: 1
           };
-        })
-      );
-    },
-    of({ array, depth, maxDepth, taskId })
-  );
+        }
+        
+        // Recursive case: split and create new ThreadPool
+        const mid = Math.floor(task.array.length / 2);
+        const leftArray = task.array.slice(0, mid);
+        const rightArray = task.array.slice(mid);
+        
+        console.log(`[Depth ${task.depth}] Thread ${threadId} splitting: left=${leftArray.length}, right=${rightArray.length}`);
+        
+        // Recreate this same function for child tasks
+        const createSubTask = (arr: number[], d: number, md: number, tid: string) => {
+          return new ThreadTask(threadFunc, of({ array: arr, depth: d, maxDepth: md, taskId: tid }));
+        };
+        
+        // Create sub-tasks
+        const leftTask = createSubTask(leftArray, task.depth + 1, task.maxDepth, `${task.taskId}-L`);
+        const rightTask = createSubTask(rightArray, task.depth + 1, task.maxDepth, `${task.taskId}-R`);
+        
+        // Create new ThreadPool for this level
+        const queue = new ThreadQueue(`sort-depth-${task.depth}`);
+        queue.enqueue(leftTask);
+        queue.enqueue(rightTask);
+        
+        const pool = new ThreadPool([queue]);
+        const results$ = pool.start();
+        
+        if (!results$) {
+          throw new Error('Failed to start thread pool');
+        }
+        
+        // Collect all results
+        const allResults: any[] = [];
+        
+        await new Promise<void>((resolve, reject) => {
+          results$.subscribe({
+            next: (result: any) => {
+              if (result.error) {
+                console.error(`[Depth ${task.depth}] Error in sub-task:`, result.error);
+                reject(new Error(result.error));
+              } else if (!result.completed && result.value) {
+                allResults.push(result.value);
+              }
+            },
+            error: reject,
+            complete: resolve
+          });
+        });
+        
+        // Extract sorted arrays
+        const sortedResults = allResults
+          .sort((a, b) => a.taskId.localeCompare(b.taskId))
+          .map(r => r.sorted);
+        
+        if (sortedResults.length !== 2) {
+          throw new Error(`Expected 2 results, got ${sortedResults.length}`);
+        }
+        
+        // Merge sorted halves
+        const merged = mergeSorted(sortedResults[0], sortedResults[1]);
+        const totalThreads = allResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
+        
+        console.log(`[Depth ${task.depth}] Thread ${threadId} merged ${merged.length} elements`);
+        
+        pool.terminateAll();
+        
+        return { 
+          threadId, 
+          sorted: merged, 
+          depth: task.depth,
+          taskId: task.taskId,
+          threadsCreated: totalThreads
+        };
+      })
+    );
+  };
+  
+  return new ThreadTask(threadFunc, of({ array, depth, maxDepth, taskId }));
 }
 
 /**

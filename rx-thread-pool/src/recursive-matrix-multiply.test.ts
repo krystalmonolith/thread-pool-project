@@ -142,6 +142,7 @@ function countOperations(rows: number, cols: number, common: number): number {
 
 /**
  * Create recursive matrix multiplication task
+ * Note: The thread function must be self-contained (no external closures)
  */
 function createRecursiveMatrixTask(
   a: Matrix,
@@ -151,129 +152,183 @@ function createRecursiveMatrixTask(
   blockSize: number,
   taskId: string
 ): ThreadTask {
-  return new ThreadTask(
-    (input: Observable<MatrixTask>, threadId: number) => {
-      return input.pipe(
-        mergeMap(async (task) => {
-          const size = task.a.length;
-          console.log(`[Depth ${task.depth}] Thread ${threadId} multiplying ${size}x${size} matrices (task: ${task.taskId})`);
-          
-          // Base case: use direct multiplication
-          if (task.depth >= task.maxDepth || size <= task.blockSize) {
-            const result = multiplyMatrices(task.a, task.b);
-            const ops = countOperations(size, size, size);
-            console.log(`[Depth ${task.depth}] Thread ${threadId} completed ${size}x${size} multiplication (${ops} ops)`);
-            
-            return {
-              threadId,
-              result,
-              depth: task.depth,
-              taskId: task.taskId,
-              threadsCreated: 1,
-              operations: ops
-            };
+  // Thread function that will be serialized - must be completely self-contained
+  const threadFunc = (input: Observable<MatrixTask>, threadId: number) => {
+    return input.pipe(
+      mergeMap(async (task) => {
+        // Import required modules in worker context
+        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
+        const { of } = require('rxjs');
+        const { mergeMap } = require('rxjs');
+        
+        const size = task.a.length;
+        console.log(`[Depth ${task.depth}] Thread ${threadId} multiplying ${size}x${size} matrices (task: ${task.taskId})`);
+        
+        // Helper functions defined in worker scope
+        function multiplyMatrices(a: any[][], b: any[][]): any[][] {
+          const rows = a.length;
+          const cols = b[0].length;
+          const common = b.length;
+          const result: any[][] = Array.from({ length: rows }, () => Array(cols).fill(0));
+          for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+              for (let k = 0; k < common; k++) {
+                result[i][j] += a[i][k] * b[k][j];
+              }
+            }
           }
-          
-          // Recursive case: divide into blocks using Strassen-like approach
-          console.log(`[Depth ${task.depth}] Thread ${threadId} splitting ${size}x${size} into quadrants`);
-          
-          const splitA = splitMatrix(task.a);
-          const splitB = splitMatrix(task.b);
-          
-          // Create 8 multiplication tasks (simplified Strassen)
-          // C11 = A11*B11 + A12*B21
-          // C12 = A11*B12 + A12*B22
-          // C21 = A21*B11 + A22*B21
-          // C22 = A21*B12 + A22*B22
-          
-          const tasks = [
-            { a: splitA.topLeft, b: splitB.topLeft, name: 'C11a' },       // A11*B11
-            { a: splitA.topLeft, b: splitB.topRight, name: 'C12a' },      // A11*B12
-            { a: splitA.topRight, b: splitB.bottomLeft, name: 'C11b' },   // A12*B21
-            { a: splitA.topRight, b: splitB.bottomRight, name: 'C12b' },  // A12*B22
-            { a: splitA.bottomLeft, b: splitB.topLeft, name: 'C21a' },    // A21*B11
-            { a: splitA.bottomLeft, b: splitB.topRight, name: 'C22a' },   // A21*B12
-            { a: splitA.bottomRight, b: splitB.bottomLeft, name: 'C21b' }, // A22*B21
-            { a: splitA.bottomRight, b: splitB.bottomRight, name: 'C22b' } // A22*B22
-          ];
-          
-          const queue = new ThreadQueue(`matrix-depth-${task.depth}`);
-          
-          tasks.forEach((t, idx) => {
-            const subTask = createRecursiveMatrixTask(
-              t.a,
-              t.b,
-              task.depth + 1,
-              task.maxDepth,
-              task.blockSize,
-              `${task.taskId}-${t.name}`
-            );
-            queue.enqueue(subTask);
-          });
-          
-          const pool = new ThreadPool([queue]);
-          const results$ = pool.start();
-          
-          if (!results$) {
-            throw new Error('Failed to start thread pool');
+          return result;
+        }
+        
+        function addMatrices(a: any[][], b: any[][]): any[][] {
+          return a.map((row, i) => row.map((val, j) => val + b[i][j]));
+        }
+        
+        function splitMatrix(m: any[][]) {
+          const size = m.length;
+          const mid = Math.floor(size / 2);
+          const topLeft: any[][] = [];
+          const topRight: any[][] = [];
+          const bottomLeft: any[][] = [];
+          const bottomRight: any[][] = [];
+          for (let i = 0; i < mid; i++) {
+            topLeft.push(m[i].slice(0, mid));
+            topRight.push(m[i].slice(mid));
           }
-          
-          const subResults: MatrixResult[] = [];
-          
-          await new Promise<void>((resolve, reject) => {
-            results$.subscribe({
-              next: (result) => {
-                if (result.error) {
-                  console.error(`[Depth ${task.depth}] Error in sub-task:`, result.error);
-                  reject(new Error(result.error));
-                } else if (!result.completed && result.value) {
-                  subResults.push(result.value as MatrixResult);
-                }
-              },
-              error: reject,
-              complete: resolve
-            });
-          });
-          
-          if (subResults.length !== 8) {
-            throw new Error(`Expected 8 results, got ${subResults.length}`);
+          for (let i = mid; i < size; i++) {
+            bottomLeft.push(m[i].slice(0, mid));
+            bottomRight.push(m[i].slice(mid));
           }
-          
-          // Sort results by task name to maintain order
-          subResults.sort((a, b) => a.taskId.localeCompare(b.taskId));
-          
-          // Combine results
-          // C11 = A11*B11 + A12*B21 = results[0] + results[2]
-          // C12 = A11*B12 + A12*B22 = results[1] + results[3]
-          // C21 = A21*B11 + A22*B21 = results[4] + results[6]
-          // C22 = A21*B12 + A22*B22 = results[5] + results[7]
-          
-          const c11 = addMatrices(subResults[0].result, subResults[2].result);
-          const c12 = addMatrices(subResults[1].result, subResults[3].result);
-          const c21 = addMatrices(subResults[4].result, subResults[6].result);
-          const c22 = addMatrices(subResults[5].result, subResults[7].result);
-          
-          const result = combineMatrix(c11, c12, c21, c22);
-          const totalThreads = subResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
-          const totalOps = subResults.reduce((sum, r) => sum + r.operations, 0);
-          
-          console.log(`[Depth ${task.depth}] Thread ${threadId} combined ${size}x${size} result`);
-          
-          pool.terminateAll();
+          return { topLeft, topRight, bottomLeft, bottomRight };
+        }
+        
+        function combineMatrix(topLeft: any[][], topRight: any[][], bottomLeft: any[][], bottomRight: any[][]): any[][] {
+          const size = topLeft.length + bottomLeft.length;
+          const result: any[][] = Array.from({ length: size }, () => Array(size).fill(0));
+          const mid = topLeft.length;
+          for (let i = 0; i < mid; i++) {
+            for (let j = 0; j < mid; j++) {
+              result[i][j] = topLeft[i][j];
+              result[i][j + mid] = topRight[i][j];
+            }
+          }
+          for (let i = 0; i < bottomLeft.length; i++) {
+            for (let j = 0; j < mid; j++) {
+              result[i + mid][j] = bottomLeft[i][j];
+              result[i + mid][j + mid] = bottomRight[i][j];
+            }
+          }
+          return result;
+        }
+        
+        function countOperations(rows: number, cols: number, common: number): number {
+          return rows * cols * common;
+        }
+        
+        // Base case: use direct multiplication
+        if (task.depth >= task.maxDepth || size <= task.blockSize) {
+          const result = multiplyMatrices(task.a, task.b);
+          const ops = countOperations(size, size, size);
+          console.log(`[Depth ${task.depth}] Thread ${threadId} completed ${size}x${size} multiplication (${ops} ops)`);
           
           return {
             threadId,
             result,
             depth: task.depth,
             taskId: task.taskId,
-            threadsCreated: totalThreads,
-            operations: totalOps
+            threadsCreated: 1,
+            operations: ops
           };
-        })
-      );
-    },
-    of({ a, b, depth, maxDepth, blockSize, taskId })
-  );
+        }
+        
+        // Recursive case: divide into blocks
+        console.log(`[Depth ${task.depth}] Thread ${threadId} splitting ${size}x${size} into quadrants`);
+        
+        const splitA = splitMatrix(task.a);
+        const splitB = splitMatrix(task.b);
+        
+        // Create 8 multiplication tasks
+        const tasks = [
+          { a: splitA.topLeft, b: splitB.topLeft, name: 'C11a' },
+          { a: splitA.topLeft, b: splitB.topRight, name: 'C12a' },
+          { a: splitA.topRight, b: splitB.bottomLeft, name: 'C11b' },
+          { a: splitA.topRight, b: splitB.bottomRight, name: 'C12b' },
+          { a: splitA.bottomLeft, b: splitB.topLeft, name: 'C21a' },
+          { a: splitA.bottomLeft, b: splitB.topRight, name: 'C22a' },
+          { a: splitA.bottomRight, b: splitB.bottomLeft, name: 'C21b' },
+          { a: splitA.bottomRight, b: splitB.bottomRight, name: 'C22b' }
+        ];
+        
+        const queue = new ThreadQueue(`matrix-depth-${task.depth}`);
+        
+        // Recreate this same function for child tasks
+        const createSubTask = (ma: any[][], mb: any[][], d: number, md: number, bs: number, tid: string) => {
+          return new ThreadTask(threadFunc, of({ a: ma, b: mb, depth: d, maxDepth: md, blockSize: bs, taskId: tid }));
+        };
+        
+        tasks.forEach((t) => {
+          const subTask = createSubTask(t.a, t.b, task.depth + 1, task.maxDepth, task.blockSize, `${task.taskId}-${t.name}`);
+          queue.enqueue(subTask);
+        });
+        
+        const pool = new ThreadPool([queue]);
+        const results$ = pool.start();
+        
+        if (!results$) {
+          throw new Error('Failed to start thread pool');
+        }
+        
+        const subResults: any[] = [];
+        
+        await new Promise<void>((resolve, reject) => {
+          results$.subscribe({
+            next: (result: any) => {
+              if (result.error) {
+                console.error(`[Depth ${task.depth}] Error in sub-task:`, result.error);
+                reject(new Error(result.error));
+              } else if (!result.completed && result.value) {
+                subResults.push(result.value);
+              }
+            },
+            error: reject,
+            complete: resolve
+          });
+        });
+        
+        if (subResults.length !== 8) {
+          throw new Error(`Expected 8 results, got ${subResults.length}`);
+        }
+        
+        // Sort results by task name to maintain order
+        subResults.sort((a, b) => a.taskId.localeCompare(b.taskId));
+        
+        // Combine results
+        const c11 = addMatrices(subResults[0].result, subResults[2].result);
+        const c12 = addMatrices(subResults[1].result, subResults[3].result);
+        const c21 = addMatrices(subResults[4].result, subResults[6].result);
+        const c22 = addMatrices(subResults[5].result, subResults[7].result);
+        
+        const result = combineMatrix(c11, c12, c21, c22);
+        const totalThreads = subResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
+        const totalOps = subResults.reduce((sum, r) => sum + r.operations, 0);
+        
+        console.log(`[Depth ${task.depth}] Thread ${threadId} combined ${size}x${size} result`);
+        
+        pool.terminateAll();
+        
+        return {
+          threadId,
+          result,
+          depth: task.depth,
+          taskId: task.taskId,
+          threadsCreated: totalThreads,
+          operations: totalOps
+        };
+      })
+    );
+  };
+  
+  return new ThreadTask(threadFunc, of({ a, b, depth, maxDepth, blockSize, taskId }));
 }
 
 /**

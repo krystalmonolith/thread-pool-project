@@ -97,6 +97,7 @@ function calculateTreeStats(node: TreeNode | null): { sum: number; count: number
 
 /**
  * Create a recursive tree traversal task
+ * Note: The thread function must be self-contained (no external closures)
  */
 function createRecursiveTreeTask(
   node: TreeNode | null,
@@ -104,138 +105,153 @@ function createRecursiveTreeTask(
   currentDepth: number,
   taskId: string
 ): ThreadTask {
-  return new ThreadTask(
-    (input: Observable<TreeTask>, threadId: number) => {
-      return input.pipe(
-        mergeMap(async (task) => {
-          console.log(`[Depth ${task.currentDepth}] Thread ${threadId} processing node (task: ${task.taskId})`);
+  // Thread function that will be serialized - must be completely self-contained
+  const threadFunc = (input: Observable<TreeTask>, threadId: number) => {
+    return input.pipe(
+      mergeMap(async (task) => {
+        // Import required modules in worker context
+        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
+        const { of } = require('rxjs');
+        const { mergeMap } = require('rxjs');
+        
+        console.log(`[Depth ${task.currentDepth}] Thread ${threadId} processing node (task: ${task.taskId})`);
+        
+        // Helper function to calculate tree stats serially (defined in worker scope)
+        function calculateTreeStats(node: any): { sum: number; count: number; max: number; min: number } {
+          if (!node) return { sum: 0, count: 0, max: -Infinity, min: Infinity };
           
-          // Base case: null node
-          if (!task.node) {
-            return {
-              threadId,
-              sum: 0,
-              count: 0,
-              maxValue: -Infinity,
-              minValue: Infinity,
-              depth: task.currentDepth,
-              taskId: task.taskId,
-              threadsCreated: 1
-            };
-          }
+          const leftStats = calculateTreeStats(node.left);
+          const rightStats = calculateTreeStats(node.right);
           
-          const nodeValue = task.node.value;
-          
-          // Base case: leaf node or max depth reached
-          if (task.currentDepth >= task.maxDepth || (!task.node.left && !task.node.right)) {
-            // Process this subtree serially
-            const stats = calculateTreeStats(task.node);
-            console.log(`[Depth ${task.currentDepth}] Thread ${threadId} completed leaf processing: ${stats.count} nodes`);
-            
-            return {
-              threadId,
-              sum: stats.sum,
-              count: stats.count,
-              maxValue: stats.max,
-              minValue: stats.min,
-              depth: task.currentDepth,
-              taskId: task.taskId,
-              threadsCreated: 1
-            };
-          }
-          
-          // Recursive case: create ThreadPool for children
-          console.log(`[Depth ${task.currentDepth}] Thread ${threadId} spawning child threads`);
-          
-          const childTasks: ThreadTask[] = [];
-          
-          if (task.node.left) {
-            childTasks.push(createRecursiveTreeTask(
-              task.node.left,
-              task.maxDepth,
-              task.currentDepth + 1,
-              `${task.taskId}-L`
-            ));
-          }
-          
-          if (task.node.right) {
-            childTasks.push(createRecursiveTreeTask(
-              task.node.right,
-              task.maxDepth,
-              task.currentDepth + 1,
-              `${task.taskId}-R`
-            ));
-          }
-          
-          if (childTasks.length === 0) {
-            // Only current node
-            return {
-              threadId,
-              sum: nodeValue,
-              count: 1,
-              maxValue: nodeValue,
-              minValue: nodeValue,
-              depth: task.currentDepth,
-              taskId: task.taskId,
-              threadsCreated: 1
-            };
-          }
-          
-          // Create ThreadPool for children
-          const queue = new ThreadQueue(`tree-depth-${task.currentDepth}`);
-          childTasks.forEach(t => queue.enqueue(t));
-          
-          const pool = new ThreadPool([queue]);
-          const results$ = pool.start();
-          
-          if (!results$) {
-            throw new Error('Failed to start thread pool');
-          }
-          
-          // Collect results
-          const childResults: TreeResult[] = [];
-          
-          await new Promise<void>((resolve, reject) => {
-            results$.subscribe({
-              next: (result) => {
-                if (result.error) {
-                  console.error(`[Depth ${task.currentDepth}] Error in child:`, result.error);
-                  reject(new Error(result.error));
-                } else if (!result.completed && result.value) {
-                  childResults.push(result.value as TreeResult);
-                }
-              },
-              error: reject,
-              complete: resolve
-            });
-          });
-          
-          // Combine results from children
-          const totalSum = nodeValue + childResults.reduce((sum, r) => sum + r.sum, 0);
-          const totalCount = 1 + childResults.reduce((sum, r) => sum + r.count, 0);
-          const maxValue = Math.max(nodeValue, ...childResults.map(r => r.maxValue));
-          const minValue = Math.min(nodeValue, ...childResults.map(r => r.minValue));
-          const totalThreads = childResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
-          
-          console.log(`[Depth ${task.currentDepth}] Thread ${threadId} combined results: ${totalCount} nodes processed`);
-          
-          pool.terminateAll();
+          return {
+            sum: node.value + leftStats.sum + rightStats.sum,
+            count: 1 + leftStats.count + rightStats.count,
+            max: Math.max(node.value, leftStats.max, rightStats.max),
+            min: Math.min(node.value, leftStats.min, rightStats.min)
+          };
+        }
+        
+        // Base case: null node
+        if (!task.node) {
+          return {
+            threadId,
+            sum: 0,
+            count: 0,
+            maxValue: -Infinity,
+            minValue: Infinity,
+            depth: task.currentDepth,
+            taskId: task.taskId,
+            threadsCreated: 1
+          };
+        }
+        
+        const nodeValue = task.node.value;
+        
+        // Base case: leaf node or max depth reached
+        if (task.currentDepth >= task.maxDepth || (!task.node.left && !task.node.right)) {
+          // Process this subtree serially
+          const stats = calculateTreeStats(task.node);
+          console.log(`[Depth ${task.currentDepth}] Thread ${threadId} completed leaf processing: ${stats.count} nodes`);
           
           return {
             threadId,
-            sum: totalSum,
-            count: totalCount,
-            maxValue,
-            minValue,
+            sum: stats.sum,
+            count: stats.count,
+            maxValue: stats.max,
+            minValue: stats.min,
             depth: task.currentDepth,
             taskId: task.taskId,
-            threadsCreated: totalThreads
+            threadsCreated: 1
           };
-        })
-      );
-    },
-    of({ node, maxDepth, currentDepth, taskId })
-  );
+        }
+        
+        // Recursive case: create ThreadPool for children
+        console.log(`[Depth ${task.currentDepth}] Thread ${threadId} spawning child threads`);
+        
+        const childTasks: any[] = [];
+        
+        // Recreate this same function for child tasks
+        const createSubTask = (n: any, md: number, cd: number, tid: string) => {
+          return new ThreadTask(threadFunc, of({ node: n, maxDepth: md, currentDepth: cd, taskId: tid }));
+        };
+        
+        if (task.node.left) {
+          childTasks.push(createSubTask(task.node.left, task.maxDepth, task.currentDepth + 1, `${task.taskId}-L`));
+        }
+        
+        if (task.node.right) {
+          childTasks.push(createSubTask(task.node.right, task.maxDepth, task.currentDepth + 1, `${task.taskId}-R`));
+        }
+        
+        if (childTasks.length === 0) {
+          // Only current node
+          return {
+            threadId,
+            sum: nodeValue,
+            count: 1,
+            maxValue: nodeValue,
+            minValue: nodeValue,
+            depth: task.currentDepth,
+            taskId: task.taskId,
+            threadsCreated: 1
+          };
+        }
+        
+        // Create ThreadPool for children
+        const queue = new ThreadQueue(`tree-depth-${task.currentDepth}`);
+        childTasks.forEach(t => queue.enqueue(t));
+        
+        const pool = new ThreadPool([queue]);
+        const results$ = pool.start();
+        
+        if (!results$) {
+          throw new Error('Failed to start thread pool');
+        }
+        
+        // Collect results
+        const childResults: any[] = [];
+        
+        await new Promise<void>((resolve, reject) => {
+          results$.subscribe({
+            next: (result: any) => {
+              if (result.error) {
+                console.error(`[Depth ${task.currentDepth}] Error in child:`, result.error);
+                reject(new Error(result.error));
+              } else if (!result.completed && result.value) {
+                childResults.push(result.value);
+              }
+            },
+            error: reject,
+            complete: resolve
+          });
+        });
+        
+        // Combine results from children
+        const totalSum = nodeValue + childResults.reduce((sum, r) => sum + r.sum, 0);
+        const totalCount = 1 + childResults.reduce((sum, r) => sum + r.count, 0);
+        const maxValue = Math.max(nodeValue, ...childResults.map(r => r.maxValue));
+        const minValue = Math.min(nodeValue, ...childResults.map(r => r.minValue));
+        const totalThreads = childResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
+        
+        console.log(`[Depth ${task.currentDepth}] Thread ${threadId} combined results: ${totalCount} nodes processed`);
+        
+        pool.terminateAll();
+        
+        return {
+          threadId,
+          sum: totalSum,
+          count: totalCount,
+          maxValue,
+          minValue,
+          depth: task.currentDepth,
+          taskId: task.taskId,
+          threadsCreated: totalThreads
+        };
+      })
+    );
+  };
+  
+  return new ThreadTask(threadFunc, of({ node, maxDepth, currentDepth, taskId }));
 }
 
 /**
