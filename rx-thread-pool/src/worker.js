@@ -11,7 +11,7 @@ if (parentPort) {
   const { functionString, inputData, threadId } = workerData;
 
   try {
-    // Replace TypeScript compiled rxjs references with actual rxjs module
+    // Replace TypeScript compiled rxjs and index references with actual modules
     // This handles the case where functions are serialized after TypeScript compilation
     let processedFunctionString = functionString;
     
@@ -22,6 +22,10 @@ if (parentPort) {
     // Replace import_rxjs, import_rxjs2, etc. patterns (alternative TypeScript compilation)
     processedFunctionString = processedFunctionString.replace(/import_rxjs\d*/g, 'rxjs');
     processedFunctionString = processedFunctionString.replace(/import_operators\d*/g, 'operators');
+    
+    // CRITICAL: Replace index_1, index_2, etc. (TypeScript compiled imports from './index')
+    // This handles: import { ThreadTask, ThreadQueue, ThreadPool } from './index'
+    processedFunctionString = processedFunctionString.replace(/index_\d+\./g, 'framework.');
     
     // Create a context with rxjs and framework classes available
     const context = {
@@ -45,6 +49,7 @@ if (parentPort) {
       first: rxjs.first,
       last: rxjs.last,
       // Framework classes for recursive tasks
+      framework: framework,  // Add framework as namespace
       ThreadTask: framework.ThreadTask,
       ThreadQueue: framework.ThreadQueue,
       ThreadPool: framework.ThreadPool
