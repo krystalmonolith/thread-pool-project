@@ -9,6 +9,7 @@ interface SortTask {
   depth: number;
   maxDepth: number;
   taskId: string;
+  threadFuncString?: string;  // ⭐ Pass function as string for recursion
 }
 
 interface SortResult {
@@ -89,14 +90,35 @@ function createRecursiveSortTask(
         
         console.log(`[Depth ${task.depth}] Thread ${threadId} splitting: left=${leftArray.length}, right=${rightArray.length}`);
         
-        // Recreate this same function for child tasks
-        const createSubTask = (arr: number[], d: number, md: number, tid: string) => {
-          return new ThreadTask(threadFunc, of({ array: arr, depth: d, maxDepth: md, taskId: tid }));
-        };
+        // Reconstruct the function from the passed string for recursion
+        // This is the key to making recursion work without closure variables
+        const funcString = task.threadFuncString || '';
+        const recreatedFunc = new Function('input', 'threadId', 
+          'return (' + funcString + ')(input, threadId)'
+        );
         
-        // Create sub-tasks
-        const leftTask = createSubTask(leftArray, task.depth + 1, task.maxDepth, `${task.taskId}-L`);
-        const rightTask = createSubTask(rightArray, task.depth + 1, task.maxDepth, `${task.taskId}-R`);
+        // Create sub-tasks with the function string passed along
+        const leftTask = new ThreadTask(
+          recreatedFunc as any,
+          of({ 
+            array: leftArray, 
+            depth: task.depth + 1, 
+            maxDepth: task.maxDepth, 
+            taskId: `${task.taskId}-L`,
+            threadFuncString: funcString
+          })
+        );
+        
+        const rightTask = new ThreadTask(
+          recreatedFunc as any,
+          of({ 
+            array: rightArray, 
+            depth: task.depth + 1, 
+            maxDepth: task.maxDepth, 
+            taskId: `${task.taskId}-R`,
+            threadFuncString: funcString
+          })
+        );
         
         // Create new ThreadPool for this level
         const queue = new ThreadQueue(`sort-depth-${task.depth}`);
@@ -156,7 +178,19 @@ function createRecursiveSortTask(
     );
   };
   
-  return new ThreadTask(threadFunc, of({ array, depth, maxDepth, taskId }));
+  // Serialize the function to pass it along for recursion
+  const threadFuncString = threadFunc.toString();
+  
+  return new ThreadTask(
+    threadFunc, 
+    of({ 
+      array, 
+      depth, 
+      maxDepth, 
+      taskId,
+      threadFuncString  // ⭐ Pass function string for recursive calls
+    })
+  );
 }
 
 /**

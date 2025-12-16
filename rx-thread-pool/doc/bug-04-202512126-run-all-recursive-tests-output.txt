@@ -1,0 +1,3138 @@
+"C:\Program Files\nodejs\npm.cmd" run test-recursive-all
+
+> @krystalmonolith/rx-thread-pool@1.0.1 pretest-recursive-all
+> npm run build
+
+
+> @krystalmonolith/rx-thread-pool@1.0.1 build
+> tsc && shx cp src/worker.js dist/worker.js
+
+
+> @krystalmonolith/rx-thread-pool@1.0.1 test-recursive-all
+> node dist/run-all-recursive-tests.js
+
+╔═══════════════════════════════════════════════════════════════╗
+║  COMPREHENSIVE RECURSIVE THREADPOOL STRESS TEST SUITE         ║
+╚═══════════════════════════════════════════════════════════════╝
+
+System Information:
+  Node.js: v22.20.0
+  Platform: win32
+  CPU cores: 28
+  Total memory: 31.82 GB
+  Free memory: 20.16 GB
+
+
+══════════════════════════════════════════════════════════════════════
+STARTING: Recursive Merge Sort
+══════════════════════════════════════════════════════════════════════
+Description: Tests parallel divide-and-conquer sorting with recursive ThreadPool creation
+Estimated duration: 2-3 minutes
+File: recursive-merge-sort.test.js
+
+=== Recursive Parallel Merge Sort Test ===
+
+Starting Recursive Parallel Merge Sort Tests...
+
+System has 28 available CPU cores
+
+
+============================================================
+Test: Small Array, Shallow
+Array size: 5000, Max depth: 2
+============================================================
+
+[Depth 0] Thread 0 sorting 5000 elements (task: ROOT)
+[Depth 0] Thread 0 splitting: left=2500, right=2500
+[Depth 1] Thread 1 sorting 2500 elements (task: ROOT-R)
+[Depth 1] Thread 0 sorting 2500 elements (task: ROOT-L)
+[Depth 1] Thread 1 splitting: left=1250, right=1250
+[Depth 1] Thread 0 splitting: left=1250, right=1250
+[Depth 2] Thread 0 sorting 1250 elements (task: ROOT-R-L)
+[Depth 2] Thread 0 sorting 1250 elements (task: ROOT-L-L)
+[Depth 2] Thread 1 sorting 1250 elements (task: ROOT-R-R)
+[Depth 2] Thread 1 sorting 1250 elements (task: ROOT-L-R)
+[Depth 0] Thread 0 merged 5000 elements
+
+------------------------------------------------------------
+✅ Test Results: Small Array, Shallow
+------------------------------------------------------------
+Array size: 5000
+Max recursion depth: 2
+Total threads created: 7
+Duration: 281ms (0.28s)
+Memory used: 0.42 MB
+Is sorted: ✅ YES
+Matches expected: ✅ YES
+Elements per second: 17793
+------------------------------------------------------------
+
+[Depth 1] Thread 0 merged 2500 elements
+[Depth 1] Thread 1 merged 2500 elements
+
+============================================================
+Test: Medium Array, Medium Depth
+Array size: 20000, Max depth: 3
+============================================================
+
+[Depth 0] Thread 0 sorting 20000 elements (task: ROOT)
+[Depth 0] Thread 0 splitting: left=10000, right=10000
+[Depth 1] Thread 1 sorting 10000 elements (task: ROOT-R)
+[Depth 1] Thread 0 sorting 10000 elements (task: ROOT-L)
+[Depth 1] Thread 1 splitting: left=5000, right=5000
+[Depth 1] Thread 0 splitting: left=5000, right=5000
+[Depth 2] Thread 0 sorting 5000 elements (task: ROOT-R-L)
+[Depth 2] Thread 0 sorting 5000 elements (task: ROOT-L-L)
+[Depth 2] Thread 1 sorting 5000 elements (task: ROOT-L-R)
+[Depth 2] Thread 1 sorting 5000 elements (task: ROOT-R-R)
+[Depth 2] Thread 0 splitting: left=2500, right=2500
+[Depth 2] Thread 0 splitting: left=2500, right=2500
+[Depth 2] Thread 1 splitting: left=2500, right=2500
+[Depth 2] Thread 1 splitting: left=2500, right=2500
+[Depth 3] Thread 1 sorting 2500 elements (task: ROOT-L-L-R)
+[Depth 3] Thread 1 completed base sort of 2500 elements
+[Depth 3] Thread 0 sorting 2500 elements (task: ROOT-R-R-L)
+[Depth 3] Thread 0 sorting 2500 elements (task: ROOT-L-L-L)
+[Depth 2] Thread 0 merged 5000 elements
+[Depth 3] Thread 0 completed base sort of 2500 elements
+[Depth 3] Thread 1 sorting 2500 elements (task: ROOT-R-R-R)
+[Depth 3] Thread 1 sorting 2500 elements (task: ROOT-L-R-R)
+[Depth 2] Thread 1 merged 5000 elements
+[Depth 3] Thread 1 sorting 2500 elements (task: ROOT-R-L-R)
+[Depth 3] Thread 1 completed base sort of 2500 elements
+[Depth 3] Thread 1 completed base sort of 2500 elements
+[Depth 3] Thread 0 sorting 2500 elements (task: ROOT-R-L-L)
+[Depth 3] Thread 0 sorting 2500 elements (task: ROOT-L-R-L)
+[Depth 2] Thread 0 merged 5000 elements
+[Depth 2] Thread 1 merged 5000 elements
+[Depth 1] Thread 0 merged 10000 elements
+[Depth 1] Thread 1 merged 10000 elements
+[Depth 0] Thread 0 merged 20000 elements
+
+------------------------------------------------------------
+✅ Test Results: Medium Array, Medium Depth
+------------------------------------------------------------
+Array size: 20000
+Max recursion depth: 3
+Total threads created: 15
+Duration: 388ms (0.39s)
+Memory used: -0.71 MB
+Is sorted: ✅ YES
+Matches expected: ✅ YES
+Elements per second: 51546
+------------------------------------------------------------
+
+
+============================================================
+Test: Large Array, Deep
+Array size: 50000, Max depth: 4
+============================================================
+
+[Depth 0] Thread 0 sorting 50000 elements (task: ROOT)
+[Depth 0] Thread 0 splitting: left=25000, right=25000
+[Depth 1] Thread 1 sorting 25000 elements (task: ROOT-R)
+[Depth 1] Thread 0 sorting 25000 elements (task: ROOT-L)
+[Depth 1] Thread 1 splitting: left=12500, right=12500
+[Depth 1] Thread 0 splitting: left=12500, right=12500
+[Depth 2] Thread 0 sorting 12500 elements (task: ROOT-R-L)
+[Depth 2] Thread 0 sorting 12500 elements (task: ROOT-L-L)
+[Depth 2] Thread 0 splitting: left=6250, right=6250
+[Depth 2] Thread 1 sorting 12500 elements (task: ROOT-R-R)
+[Depth 2] Thread 1 sorting 12500 elements (task: ROOT-L-R)
+[Depth 2] Thread 0 splitting: left=6250, right=6250
+[Depth 2] Thread 1 splitting: left=6250, right=6250
+[Depth 2] Thread 1 splitting: left=6250, right=6250
+[Depth 3] Thread 0 sorting 6250 elements (task: ROOT-R-L-L)
+[Depth 3] Thread 0 sorting 6250 elements (task: ROOT-R-R-L)
+[Depth 3] Thread 0 splitting: left=3125, right=3125
+[Depth 3] Thread 1 sorting 6250 elements (task: ROOT-R-R-R)
+[Depth 3] Thread 0 splitting: left=3125, right=3125
+[Depth 3] Thread 1 splitting: left=3125, right=3125
+[Depth 3] Thread 1 sorting 6250 elements (task: ROOT-L-R-R)
+[Depth 3] Thread 0 sorting 6250 elements (task: ROOT-L-L-L)
+[Depth 3] Thread 1 sorting 6250 elements (task: ROOT-R-L-R)
+[Depth 3] Thread 1 sorting 6250 elements (task: ROOT-L-L-R)
+[Depth 3] Thread 1 splitting: left=3125, right=3125
+[Depth 3] Thread 0 splitting: left=3125, right=3125
+[Depth 3] Thread 0 sorting 6250 elements (task: ROOT-L-R-L)
+[Depth 3] Thread 1 splitting: left=3125, right=3125
+[Depth 3] Thread 1 splitting: left=3125, right=3125
+[Depth 3] Thread 0 splitting: left=3125, right=3125
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-R-L-L-R)
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-R-R-L-R)
+[Depth 4] Thread 1 completed base sort of 3125 elements
+[Depth 4] Thread 1 completed base sort of 3125 elements
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-L-R-R-L)
+[Depth 4] Thread 0 completed base sort of 3125 elements
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-L-L-L-L)
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-L-L-R-L)
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-L-L-L-R)
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-R-R-L-L)
+[Depth 4] Thread 0 completed base sort of 3125 elements
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-L-R-R-R)
+[Depth 3] Thread 0 merged 6250 elements
+[Depth 3] Thread 0 merged 6250 elements
+[Depth 3] Thread 1 merged 6250 elements
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-R-L-L-L)
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-R-L-R-R)
+[Depth 3] Thread 0 merged 6250 elements
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-L-L-R-R)
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-R-R-R-R)
+[Depth 4] Thread 1 completed base sort of 3125 elements
+[Depth 3] Thread 1 merged 6250 elements
+[Depth 4] Thread 1 completed base sort of 3125 elements
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-L-R-L-L)
+[Depth 2] Thread 0 merged 12500 elements
+[Depth 4] Thread 0 completed base sort of 3125 elements
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-R-R-R-L)
+[Depth 4] Thread 0 sorting 3125 elements (task: ROOT-R-L-R-L)
+[Depth 3] Thread 1 merged 6250 elements
+[Depth 3] Thread 1 merged 6250 elements
+[Depth 4] Thread 1 sorting 3125 elements (task: ROOT-L-R-L-R)
+[Depth 2] Thread 1 merged 12500 elements
+[Depth 3] Thread 0 merged 6250 elements
+[Depth 2] Thread 0 merged 12500 elements
+[Depth 2] Thread 1 merged 12500 elements
+[Depth 1] Thread 1 merged 25000 elements
+[Depth 1] Thread 0 merged 25000 elements
+[Depth 0] Thread 0 merged 50000 elements
+
+------------------------------------------------------------
+✅ Test Results: Large Array, Deep
+------------------------------------------------------------
+Array size: 50000
+Max recursion depth: 4
+Total threads created: 31
+Duration: 543ms (0.54s)
+Memory used: 1.16 MB
+Is sorted: ✅ YES
+Matches expected: ✅ YES
+Elements per second: 92081
+------------------------------------------------------------
+
+
+============================================================
+All Tests Complete!
+Total duration: 7.26s
+============================================================
+
+──────────────────────────────────────────────────────────────────────
+✅ Recursive Merge Sort COMPLETED SUCCESSFULLY
+Duration: 0.12 minutes
+──────────────────────────────────────────────────────────────────────
+
+Waiting 5 seconds before next test...
+
+
+══════════════════════════════════════════════════════════════════════
+STARTING: Binary Tree Traversal
+══════════════════════════════════════════════════════════════════════
+Description: Tests tree-based recursion with balanced and skewed trees
+Estimated duration: 3-4 minutes
+File: recursive-tree-traversal.test.js
+
+=== Recursive Binary Tree Traversal Test ===
+
+Starting Recursive Binary Tree Traversal Tests...
+
+System has 28 available CPU cores
+
+Generating small balanced tree (depth 6)...
+
+============================================================
+Test: Small Balanced Tree
+Max recursion depth: 3
+============================================================
+
+Tree has 63 nodes
+Expected: sum=33234, max=990, min=7
+
+[Depth 0] Thread 0 processing node (task: ROOT)
+[Depth 0] Thread 0 spawning child threads
+[Depth 1] Thread 0 processing node (task: ROOT-L)
+[Depth 1] Thread 1 processing node (task: ROOT-R)
+[Depth 1] Thread 0 spawning child threads
+[Depth 1] Thread 1 spawning child threads
+[Depth 2] Thread 1 processing node (task: ROOT-L-R)
+[Depth 2] Thread 0 processing node (task: ROOT-L-L)
+[Depth 2] Thread 1 processing node (task: ROOT-R-R)
+[Depth 2] Thread 0 processing node (task: ROOT-R-L)
+[Depth 2] Thread 1 spawning child threads
+[Depth 2] Thread 0 spawning child threads
+[Depth 2] Thread 1 spawning child threads
+[Depth 2] Thread 0 spawning child threads
+[Depth 3] Thread 1 processing node (task: ROOT-L-R-R)
+[Depth 3] Thread 1 completed leaf processing: 7 nodes
+[Depth 3] Thread 0 processing node (task: ROOT-R-R-L)
+[Depth 3] Thread 0 completed leaf processing: 7 nodes
+[Depth 3] Thread 1 processing node (task: ROOT-R-R-R)
+[Depth 3] Thread 0 processing node (task: ROOT-L-L-L)
+[Depth 2] Thread 1 combined results: 15 nodes processed
+[Depth 3] Thread 0 processing node (task: ROOT-L-R-L)
+[Depth 2] Thread 1 combined results: 15 nodes processed
+[Depth 3] Thread 0 completed leaf processing: 7 nodes
+[Depth 3] Thread 1 processing node (task: ROOT-R-L-R)
+[Depth 3] Thread 1 processing node (task: ROOT-L-L-R)
+[Depth 2] Thread 0 combined results: 15 nodes processed
+[Depth 1] Thread 0 combined results: 31 nodes processed
+[Depth 3] Thread 0 processing node (task: ROOT-R-L-L)
+[Depth 2] Thread 0 combined results: 15 nodes processed
+[Depth 1] Thread 1 combined results: 31 nodes processed
+[Depth 0] Thread 0 combined results: 63 nodes processed
+
+------------------------------------------------------------
+✅ Test Results: Small Balanced Tree
+------------------------------------------------------------
+Nodes processed: 63 / 63
+Total threads created: 15
+Duration: 378ms (0.38s)
+Memory used: 0.41 MB
+Nodes per second: 166
+
+Verification:
+  Sum: 33234 ✅ (expected: 33234)
+  Count: 63 ✅ (expected: 63)
+  Max: 990 ✅ (expected: 990)
+  Min: 7 ✅ (expected: 7)
+  Overall: ✅ PASS
+------------------------------------------------------------
+
+Generating medium balanced tree (depth 8)...
+
+============================================================
+Test: Medium Balanced Tree
+Max recursion depth: 4
+============================================================
+
+Tree has 255 nodes
+Expected: sum=129175, max=999, min=1
+
+[Depth 0] Thread 0 processing node (task: ROOT)
+[Depth 0] Thread 0 spawning child threads
+[Depth 1] Thread 0 processing node (task: ROOT-L)
+[Depth 1] Thread 1 processing node (task: ROOT-R)
+[Depth 1] Thread 0 spawning child threads
+[Depth 1] Thread 1 spawning child threads
+[Depth 2] Thread 0 processing node (task: ROOT-L-L)
+[Depth 2] Thread 1 processing node (task: ROOT-R-R)
+[Depth 2] Thread 0 spawning child threads
+[Depth 2] Thread 0 processing node (task: ROOT-R-L)
+[Depth 2] Thread 1 processing node (task: ROOT-L-R)
+[Depth 2] Thread 1 spawning child threads
+[Depth 2] Thread 0 spawning child threads
+[Depth 2] Thread 1 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-L-L-L)
+[Depth 3] Thread 1 processing node (task: ROOT-L-L-R)
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-R-R-L)
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 1 processing node (task: ROOT-R-R-R)
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 1 processing node (task: ROOT-R-L-R)
+[Depth 3] Thread 1 processing node (task: ROOT-L-R-R)
+[Depth 3] Thread 0 processing node (task: ROOT-R-L-L)
+[Depth 3] Thread 0 processing node (task: ROOT-L-R-L)
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 1 spawning child threads
+[Depth 4] Thread 1 processing node (task: ROOT-L-L-L-R)
+[Depth 4] Thread 1 completed leaf processing: 15 nodes
+[Depth 4] Thread 0 processing node (task: ROOT-R-L-L-L)
+[Depth 4] Thread 0 processing node (task: ROOT-R-R-R-L)
+[Depth 4] Thread 0 completed leaf processing: 15 nodes
+[Depth 4] Thread 1 processing node (task: ROOT-R-R-L-R)
+[Depth 4] Thread 1 completed leaf processing: 15 nodes
+[Depth 4] Thread 0 processing node (task: ROOT-L-L-R-L)
+[Depth 4] Thread 1 processing node (task: ROOT-L-R-L-R)
+[Depth 4] Thread 1 completed leaf processing: 15 nodes
+[Depth 4] Thread 1 processing node (task: ROOT-L-L-R-R)
+[Depth 4] Thread 0 completed leaf processing: 15 nodes
+[Depth 3] Thread 1 combined results: 31 nodes processed
+[Depth 4] Thread 0 processing node (task: ROOT-R-L-R-L)
+[Depth 4] Thread 0 completed leaf processing: 15 nodes
+[Depth 4] Thread 1 processing node (task: ROOT-R-L-L-R)
+[Depth 3] Thread 0 combined results: 31 nodes processed
+[Depth 4] Thread 1 processing node (task: ROOT-R-R-R-R)
+[Depth 4] Thread 0 processing node (task: ROOT-L-L-L-L)
+[Depth 3] Thread 1 combined results: 31 nodes processed
+[Depth 3] Thread 0 combined results: 31 nodes processed
+[Depth 2] Thread 0 combined results: 63 nodes processed
+[Depth 4] Thread 0 processing node (task: ROOT-R-R-L-L)
+[Depth 4] Thread 0 processing node (task: ROOT-L-R-L-L)
+[Depth 3] Thread 0 combined results: 31 nodes processed
+[Depth 3] Thread 0 combined results: 31 nodes processed
+[Depth 2] Thread 1 combined results: 63 nodes processed
+[Depth 4] Thread 1 processing node (task: ROOT-L-R-R-R)
+[Depth 4] Thread 1 processing node (task: ROOT-R-L-R-R)
+[Depth 3] Thread 1 combined results: 31 nodes processed
+[Depth 4] Thread 0 processing node (task: ROOT-L-R-R-L)
+[Depth 2] Thread 0 combined results: 63 nodes processed
+[Depth 1] Thread 0 combined results: 127 nodes processed
+
+------------------------------------------------------------
+✅ Test Results: Medium Balanced Tree
+------------------------------------------------------------
+Nodes processed: 255 / 255
+Total threads created: 31
+Duration: 515ms (0.52s)
+Memory used: 0.36 MB
+Nodes per second: 495
+
+Verification:
+  Sum: 129175 ✅ (expected: 129175)
+  Count: 255 ✅ (expected: 255)
+  Max: 999 ✅ (expected: 999)
+  Min: 1 ✅ (expected: 1)
+  Overall: ✅ PASS
+------------------------------------------------------------
+
+Generating large balanced tree (depth 10)...
+
+============================================================
+Test: Large Balanced Tree
+Max recursion depth: 5
+============================================================
+
+Tree has 1023 nodes
+Expected: sum=519025, max=995, min=3
+
+[Depth 0] Thread 0 processing node (task: ROOT)
+[Depth 0] Thread 0 spawning child threads
+[Depth 1] Thread 0 processing node (task: ROOT-L)
+[Depth 1] Thread 1 processing node (task: ROOT-R)
+[Depth 1] Thread 0 spawning child threads
+[Depth 1] Thread 1 spawning child threads
+[Depth 2] Thread 1 processing node (task: ROOT-L-R)
+[Depth 2] Thread 0 processing node (task: ROOT-L-L)
+[Depth 2] Thread 1 spawning child threads
+[Depth 2] Thread 0 spawning child threads
+[Depth 2] Thread 0 processing node (task: ROOT-R-L)
+[Depth 2] Thread 1 processing node (task: ROOT-R-R)
+[Depth 2] Thread 0 spawning child threads
+[Depth 2] Thread 1 spawning child threads
+[Depth 3] Thread 1 processing node (task: ROOT-L-L-R)
+[Depth 3] Thread 0 processing node (task: ROOT-L-R-L)
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-L-L-L)
+[Depth 3] Thread 1 processing node (task: ROOT-R-L-R)
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-R-R-L)
+[Depth 3] Thread 0 spawning child threads
+[Depth 3] Thread 1 processing node (task: ROOT-L-R-R)
+[Depth 3] Thread 1 processing node (task: ROOT-R-R-R)
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 1 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-R-L-L)
+[Depth 3] Thread 0 spawning child threads
+[Depth 4] Thread 0 processing node (task: ROOT-L-L-R-L)
+[Depth 4] Thread 1 processing node (task: ROOT-L-R-L-R)
+[Depth 4] Thread 0 processing node (task: ROOT-R-R-R-L)
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 1 processing node (task: ROOT-L-L-R-R)
+[Depth 4] Thread 1 processing node (task: ROOT-R-R-L-R)
+[Depth 4] Thread 1 processing node (task: ROOT-L-L-L-R)
+[Depth 4] Thread 0 processing node (task: ROOT-L-R-L-L)
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 1 processing node (task: ROOT-L-R-R-R)
+[Depth 4] Thread 0 processing node (task: ROOT-R-L-R-L)
+[Depth 4] Thread 0 processing node (task: ROOT-L-L-L-L)
+[Depth 4] Thread 1 processing node (task: ROOT-R-L-R-R)
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 1 processing node (task: ROOT-R-R-R-R)
+[Depth 4] Thread 0 processing node (task: ROOT-R-R-L-L)
+[Depth 4] Thread 1 processing node (task: ROOT-R-L-L-R)
+[Depth 4] Thread 0 processing node (task: ROOT-R-L-L-L)
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 0 processing node (task: ROOT-L-R-R-L)
+[Depth 4] Thread 1 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 4] Thread 0 spawning child threads
+[Depth 5] Thread 0 processing node (task: ROOT-L-L-R-L-L)
+[Depth 5] Thread 0 processing node (task: ROOT-L-R-R-R-L)
+[Depth 5] Thread 0 completed leaf processing: 31 nodes
+[Depth 5] Thread 0 processing node (task: ROOT-L-L-L-L-L)
+[Depth 5] Thread 0 processing node (task: ROOT-L-R-L-R-L)
+[Depth 5] Thread 1 processing node (task: ROOT-L-R-R-R-R)
+[Depth 5] Thread 0 processing node (task: ROOT-R-L-R-L-L)
+[Depth 5] Thread 0 completed leaf processing: 31 nodes
+[Depth 5] Thread 0 completed leaf processing: 31 nodes
+[Depth 5] Thread 1 processing node (task: ROOT-L-L-L-L-R)
+[Depth 5] Thread 1 completed leaf processing: 31 nodes
+[Depth 5] Thread 1 completed leaf processing: 31 nodes
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-R-R-R-R-R)
+[Depth 5] Thread 1 processing node (task: ROOT-R-R-L-L-R)
+[Depth 5] Thread 0 completed leaf processing: 31 nodes
+[Depth 5] Thread 1 processing node (task: ROOT-R-L-R-R-R)
+[Depth 5] Thread 1 processing node (task: ROOT-R-L-L-L-R)
+[Depth 5] Thread 0 processing node (task: ROOT-R-R-L-R-L)
+[Depth 5] Thread 1 processing node (task: ROOT-R-L-R-L-R)
+[Depth 5] Thread 1 completed leaf processing: 31 nodes
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 5] Thread 0 completed leaf processing: 31 nodes
+[Depth 5] Thread 1 completed leaf processing: 31 nodes
+[Depth 5] Thread 0 processing node (task: ROOT-R-R-L-L-L)
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-L-L-L-R-R)
+[Depth 5] Thread 0 processing node (task: ROOT-R-L-L-L-L)
+[Depth 5] Thread 0 processing node (task: ROOT-R-R-R-L-L)
+[Depth 5] Thread 1 processing node (task: ROOT-L-R-L-R-R)
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-R-L-L-R-R)
+[Depth 5] Thread 1 processing node (task: ROOT-L-R-L-L-R)
+[Depth 5] Thread 0 processing node (task: ROOT-L-L-R-R-L)
+[Depth 5] Thread 0 processing node (task: ROOT-L-R-L-L-L)
+[Depth 5] Thread 0 processing node (task: ROOT-R-L-R-R-L)
+[Depth 5] Thread 0 processing node (task: ROOT-R-R-R-R-L)
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 3] Thread 1 combined results: 127 nodes processed
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 3] Thread 0 combined results: 127 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-R-R-R-L-R)
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 5] Thread 0 processing node (task: ROOT-L-L-L-R-L)
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 3] Thread 0 combined results: 127 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-L-L-R-L-R)
+[Depth 5] Thread 1 processing node (task: ROOT-R-R-L-R-R)
+[Depth 4] Thread 0 combined results: 63 nodes processed
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 3] Thread 0 combined results: 127 nodes processed
+[Depth 2] Thread 1 combined results: 255 nodes processed
+[Depth 5] Thread 0 processing node (task: ROOT-R-L-L-R-L)
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 3] Thread 0 combined results: 127 nodes processed
+[Depth 2] Thread 0 combined results: 255 nodes processed
+[Depth 1] Thread 1 combined results: 511 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-L-L-R-R-R)
+[Depth 5] Thread 0 processing node (task: ROOT-L-R-R-L-L)
+[Depth 4] Thread 1 combined results: 63 nodes processed
+[Depth 2] Thread 0 combined results: 255 nodes processed
+[Depth 5] Thread 1 processing node (task: ROOT-L-R-R-L-R)
+[Depth 3] Thread 1 combined results: 127 nodes processed
+[Depth 1] Thread 0 combined results: 511 nodes processed
+[Depth 0] Thread 0 combined results: 1023 nodes processed
+
+------------------------------------------------------------
+✅ Test Results: Large Balanced Tree
+------------------------------------------------------------
+Nodes processed: 1023 / 1023
+Total threads created: 63
+Duration: 751ms (0.75s)
+Memory used: -0.56 MB
+Nodes per second: 1362
+
+Verification:
+  Sum: 519025 ✅ (expected: 519025)
+  Count: 1023 ✅ (expected: 1023)
+  Max: 995 ✅ (expected: 995)
+  Min: 3 ✅ (expected: 3)
+  Overall: ✅ PASS
+------------------------------------------------------------
+
+Generating skewed tree (depth 20, right-skewed)...
+
+============================================================
+Test: Right-Skewed Tree
+Max recursion depth: 5
+============================================================
+
+Tree has 20 nodes
+Expected: sum=10443, max=965, min=25
+
+[Depth 0] Thread 0 processing node (task: ROOT)
+[Depth 0] Thread 0 spawning child threads
+[Depth 1] Thread 0 processing node (task: ROOT-R)
+[Depth 1] Thread 0 spawning child threads
+[Depth 2] Thread 0 processing node (task: ROOT-R-R)
+[Depth 2] Thread 0 spawning child threads
+[Depth 3] Thread 0 processing node (task: ROOT-R-R-R)
+[Depth 3] Thread 0 spawning child threads
+[Depth 4] Thread 0 processing node (task: ROOT-R-R-R-R)
+[Depth 4] Thread 0 spawning child threads
+[Depth 5] Thread 0 processing node (task: ROOT-R-R-R-R-R)
+[Depth 3] Thread 0 combined results: 17 nodes processed
+[Depth 1] Thread 0 combined results: 19 nodes processed
+
+------------------------------------------------------------
+✅ Test Results: Right-Skewed Tree
+------------------------------------------------------------
+Nodes processed: 20 / 20
+Total threads created: 6
+Duration: 518ms (0.52s)
+Memory used: -1.58 MB
+Nodes per second: 38
+
+Verification:
+  Sum: 10443 ✅ (expected: 10443)
+  Count: 20 ✅ (expected: 20)
+  Max: 965 ✅ (expected: 965)
+  Min: 25 ✅ (expected: 25)
+  Overall: ✅ PASS
+------------------------------------------------------------
+
+
+============================================================
+All Tree Tests Complete!
+Total duration: 10.21s
+============================================================
+
+──────────────────────────────────────────────────────────────────────
+✅ Binary Tree Traversal COMPLETED SUCCESSFULLY
+Duration: 0.17 minutes
+──────────────────────────────────────────────────────────────────────
+
+Waiting 5 seconds before next test...
+
+
+══════════════════════════════════════════════════════════════════════
+STARTING: Matrix Multiplication
+══════════════════════════════════════════════════════════════════════
+Description: Tests block-based parallel matrix operations
+Estimated duration: 5-10 minutes
+File: recursive-matrix-multiply.test.js
+
+=== Recursive Parallel Matrix Multiplication Test ===
+
+Starting Recursive Parallel Matrix Multiplication Tests...
+
+System has 28 available CPU cores
+
+
+============================================================
+Test: Small Matrix
+Matrix size: 64x64
+Max recursion depth: 2
+Block size: 16x16
+============================================================
+
+Generating matrices...
+Calculating expected result (serial)...
+Serial multiplication took 3ms
+
+[Depth 0] Thread 0 multiplying 64x64 matrices (task: ROOT)
+[Depth 0] Thread 0 splitting 64x64 into quadrants
+[Depth 1] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a)
+[Depth 1] Thread 1 splitting 32x32 into quadrants
+[Depth 1] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b)
+[Depth 1] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a)
+[Depth 1] Thread 7 splitting 32x32 into quadrants
+[Depth 1] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a)
+[Depth 1] Thread 0 splitting 32x32 into quadrants
+[Depth 1] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b)
+[Depth 1] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b)
+[Depth 1] Thread 4 splitting 32x32 into quadrants
+[Depth 1] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b)
+[Depth 1] Thread 2 splitting 32x32 into quadrants
+[Depth 1] Thread 6 splitting 32x32 into quadrants
+[Depth 1] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a)
+[Depth 1] Thread 3 splitting 32x32 into quadrants
+[Depth 1] Thread 5 splitting 32x32 into quadrants
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C12a-C11b)
+[Depth 2] Thread 2 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C12a-C21a)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C21a-C11a)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C12a-C11a)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C12a-C21b)
+[Depth 2] Thread 6 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C11b-C12a)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C11a-C22b)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C22a-C21a)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C12a-C12b)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C12a-C12a)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C22b-C11a)
+[Depth 2] Thread 1 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C11b-C11a)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C12a-C22b)
+[Depth 2] Thread 7 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C11a-C21a)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C11a-C11a)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C21a-C12b)
+[Depth 2] Thread 3 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C21b-C11a)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C12b-C11b)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C21b-C11b)
+[Depth 2] Thread 2 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C21b-C22a)
+[Depth 2] Thread 5 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C21b-C21a)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C22b-C11b)
+[Depth 2] Thread 2 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C22b-C21a)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C22b-C12b)
+[Depth 2] Thread 3 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C22b-C12a)
+[Depth 2] Thread 1 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 2 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C12b-C21a)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C12b-C22b)
+[Depth 2] Thread 7 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C12b-C11a)
+[Depth 2] Thread 0 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C12b-C22a)
+[Depth 2] Thread 5 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C12b-C12b)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C11b-C21a)
+[Depth 2] Thread 4 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C11a-C12b)
+[Depth 2] Thread 3 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C21a-C11b)
+[Depth 2] Thread 2 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C22a-C21b)
+[Depth 2] Thread 6 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C22a-C22b)
+[Depth 2] Thread 7 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C22a-C22a)
+[Depth 2] Thread 5 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C22a-C12b)
+[Depth 2] Thread 3 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C12b-C12a)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C11a-C22a)
+[Depth 2] Thread 5 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C21a-C22b)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C21a-C12a)
+[Depth 2] Thread 7 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 1 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C21a-C22a)
+[Depth 2] Thread 5 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C11b-C12b)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C22a-C12a)
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C21b-C12a)
+[Depth 2] Thread 1 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C12a-C22a)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C11b-C11b)
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C21a-C21b)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C22a-C11b)
+[Depth 2] Thread 2 multiplying 16x16 matrices (task: ROOT-C11a-C11b)
+[Depth 2] Thread 3 multiplying 16x16 matrices (task: ROOT-C21b-C12b)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C11b-C22a)
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C11a-C21b)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C11b-C22b)
+[Depth 1] Thread 1 combined 32x32 result
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C21b-C22b)
+[Depth 2] Thread 7 multiplying 16x16 matrices (task: ROOT-C22b-C22b)
+[Depth 2] Thread 7 completed 16x16 multiplication (4096 ops)
+[Depth 2] Thread 5 multiplying 16x16 matrices (task: ROOT-C22b-C22a)
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C21b-C21b)
+[Depth 2] Thread 0 multiplying 16x16 matrices (task: ROOT-C22a-C11a)
+[Depth 1] Thread 5 combined 32x32 result
+[Depth 1] Thread 6 combined 32x32 result
+[Depth 2] Thread 1 multiplying 16x16 matrices (task: ROOT-C11a-C12a)
+[Depth 1] Thread 0 combined 32x32 result
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C12b-C21b)
+[Depth 2] Thread 4 multiplying 16x16 matrices (task: ROOT-C21a-C21a)
+[Depth 1] Thread 4 combined 32x32 result
+[Depth 1] Thread 3 combined 32x32 result
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C22b-C21b)
+[Depth 1] Thread 7 combined 32x32 result
+[Depth 2] Thread 6 multiplying 16x16 matrices (task: ROOT-C11b-C21b)
+[Depth 1] Thread 2 combined 32x32 result
+Mismatch at [0][0]: 1332 vs 1079
+
+------------------------------------------------------------
+✅ Test Results: Small Matrix
+------------------------------------------------------------
+Matrix size: 64x64
+Max recursion depth: 2
+Block size: 16x16
+Total threads created: 73
+Total operations: 262,144
+
+Performance:
+  Serial time: 3ms
+  Parallel time: 666ms
+  Speedup: 0.00x
+  Operations/sec: 393,609
+  Memory used: 0.04 MB
+
+Verification:
+  Result matches expected: ❌ FAIL
+------------------------------------------------------------
+
+[Depth 0] Thread 0 combined 64x64 result
+
+============================================================
+Test: Medium Matrix
+Matrix size: 128x128
+Max recursion depth: 2
+Block size: 32x32
+============================================================
+
+Generating matrices...
+Calculating expected result (serial)...
+Serial multiplication took 11ms
+
+[Depth 0] Thread 0 multiplying 128x128 matrices (task: ROOT)
+[Depth 0] Thread 0 splitting 128x128 into quadrants
+[Depth 1] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a)
+[Depth 1] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b)
+[Depth 1] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a)
+[Depth 1] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b)
+[Depth 1] Thread 1 splitting 64x64 into quadrants
+[Depth 1] Thread 2 splitting 64x64 into quadrants
+[Depth 1] Thread 4 splitting 64x64 into quadrants
+[Depth 1] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b)
+[Depth 1] Thread 3 splitting 64x64 into quadrants
+[Depth 1] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a)
+[Depth 1] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a)
+[Depth 1] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b)
+[Depth 1] Thread 0 splitting 64x64 into quadrants
+[Depth 1] Thread 6 splitting 64x64 into quadrants
+[Depth 1] Thread 5 splitting 64x64 into quadrants
+[Depth 1] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C22a)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C11b)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C22a)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C12b)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C12a)
+[Depth 2] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C21a)
+[Depth 2] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C21b)
+[Depth 2] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C21a)
+[Depth 2] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C22b)
+[Depth 2] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C12a)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C21a)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C11b)
+[Depth 2] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C21b)
+[Depth 2] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C21b)
+[Depth 2] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C22b)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C11a)
+[Depth 2] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C12b)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C11a)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C12a)
+[Depth 2] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C22a)
+[Depth 2] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C21a)
+[Depth 2] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C12a)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C22a)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C11a)
+[Depth 2] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C11a)
+[Depth 2] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C22b)
+[Depth 2] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C11b)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C11a)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C21b)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C22b)
+[Depth 2] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C21a)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C21b)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C12b)
+[Depth 2] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C11b)
+[Depth 2] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C21a)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C12b)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C11b)
+[Depth 2] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C22b)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C12b)
+[Depth 2] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C12a)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C22a)
+[Depth 2] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C12a)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C22b)
+[Depth 2] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C11a)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C12b)
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C22b)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C11b)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C11b)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C21b)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C12b)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C21b)
+[Depth 2] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C11b)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C22a)
+[Depth 2] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C21b)
+[Depth 1] Thread 7 combined 64x64 result
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C22a)
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C11a)
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C12a)
+[Depth 2] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C22a)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C21a)
+[Depth 1] Thread 5 combined 64x64 result
+[Depth 2] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C12a)
+[Depth 2] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C21a)
+[Depth 1] Thread 1 combined 64x64 result
+[Depth 1] Thread 6 combined 64x64 result
+[Depth 1] Thread 3 combined 64x64 result
+[Depth 2] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C22b)
+[Depth 2] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C12b)
+[Depth 1] Thread 4 combined 64x64 result
+[Depth 1] Thread 2 combined 64x64 result
+[Depth 2] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C11a)
+[Depth 1] Thread 0 combined 64x64 result
+Mismatch at [0][0]: 2762 vs 2866
+
+------------------------------------------------------------
+✅ Test Results: Medium Matrix
+------------------------------------------------------------
+Matrix size: 128x128
+Max recursion depth: 2
+Block size: 32x32
+Total threads created: 73
+Total operations: 2,097,152
+
+Performance:
+  Serial time: 11ms
+  Parallel time: 682ms
+  Speedup: 0.02x
+  Operations/sec: 3,075,002
+  Memory used: 0.93 MB
+
+Verification:
+  Result matches expected: ❌ FAIL
+------------------------------------------------------------
+
+[Depth 0] Thread 0 combined 128x128 result
+
+============================================================
+Test: Large Matrix
+Matrix size: 256x256
+Max recursion depth: 3
+Block size: 32x32
+============================================================
+
+Generating matrices...
+Calculating expected result (serial)...
+Serial multiplication took 37ms
+
+[Depth 0] Thread 0 multiplying 256x256 matrices (task: ROOT)
+[Depth 0] Thread 0 splitting 256x256 into quadrants
+[Depth 1] Thread 1 multiplying 128x128 matrices (task: ROOT-C12a)
+[Depth 1] Thread 2 multiplying 128x128 matrices (task: ROOT-C11b)
+[Depth 1] Thread 5 multiplying 128x128 matrices (task: ROOT-C22a)
+[Depth 1] Thread 0 multiplying 128x128 matrices (task: ROOT-C11a)
+[Depth 1] Thread 3 multiplying 128x128 matrices (task: ROOT-C12b)
+[Depth 1] Thread 2 splitting 128x128 into quadrants
+[Depth 1] Thread 7 multiplying 128x128 matrices (task: ROOT-C22b)
+[Depth 1] Thread 1 splitting 128x128 into quadrants
+[Depth 1] Thread 5 splitting 128x128 into quadrants
+[Depth 1] Thread 0 splitting 128x128 into quadrants
+[Depth 1] Thread 3 splitting 128x128 into quadrants
+[Depth 1] Thread 7 splitting 128x128 into quadrants
+[Depth 1] Thread 6 multiplying 128x128 matrices (task: ROOT-C21b)
+[Depth 1] Thread 4 multiplying 128x128 matrices (task: ROOT-C21a)
+[Depth 1] Thread 6 splitting 128x128 into quadrants
+[Depth 1] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C11a)
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C11b)
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C21a)
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C21a)
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C12a)
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C12a)
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C12a)
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C12b)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C22b)
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C12b)
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C22a)
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C22a)
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C21b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C21a)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C11b)
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C21a)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C11b)
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C21b)
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C11b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C21b)
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C22b)
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C12b)
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C22a)
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C21a)
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C21b)
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C11a)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C21b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C22b)
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C12b)
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C21b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C11b)
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C11a)
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C12a)
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C21b)
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C12b)
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C11a)
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C12b)
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C12a)
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C22b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C21a)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C22b)
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C12a)
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C21a)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C11b)
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C12a)
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C22b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C11a)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C11b)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C11a)
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C12b)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C11a)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C22a)
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C22b)
+[Depth 2] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C12a)
+[Depth 2] Thread 1 splitting 64x64 into quadrants
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C11a)
+[Depth 2] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C11b)
+[Depth 2] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C12b)
+[Depth 2] Thread 0 splitting 64x64 into quadrants
+[Depth 2] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C22b)
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C22a)
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 2 splitting 64x64 into quadrants
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C22a)
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C22a)
+[Depth 2] Thread 3 splitting 64x64 into quadrants
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 7 splitting 64x64 into quadrants
+[Depth 2] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C21b)
+[Depth 2] Thread 6 splitting 64x64 into quadrants
+[Depth 2] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C22a)
+[Depth 2] Thread 5 splitting 64x64 into quadrants
+[Depth 2] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C11a-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C11b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C11b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C12a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C22a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C22b)
+[Depth 2] Thread 4 splitting 64x64 into quadrants
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C12b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C12b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C11a)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C21b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C12b-C12b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C11a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C11a)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C12a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C12b-C12a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C11b)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C12a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C11b-C22a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C21b)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C21a-C22b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C22b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C11a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C11b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C21b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C11b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C21b-C21a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C11b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C12a)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C12a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C21b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C12a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C21a-C12a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C11b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C21a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C22a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C21b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C21b-C11a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C22a)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C21b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C11a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C22a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C12b)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C11a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C11b)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C12b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C22b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C22b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C12a)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C21b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C21a)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C11a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C22a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C21b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C12b)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C11a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C21a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C11b-C21b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C11b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C21a-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C11b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C11b)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C12b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C12a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C21b-C12a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C21b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C21b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C21b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C21a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C21b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C21b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C21a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C22a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C21b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C22b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C21a-C12b)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C12a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C22a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C12b)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C12b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C12a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C22b)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C21b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C12a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C22b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C12b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C21b-C21b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C21b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C12b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C12a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C12b)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C21b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C12a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C12b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C11b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C11b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C22b)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C22a)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C11b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C21b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C22b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C22a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C11a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C22b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C12a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C11a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C22b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C21a)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C11b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C22b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C11b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C22b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C22b)
+[Depth 3] Thread 7 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C22a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C12a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C12a)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C22a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C12a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C11b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C22a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C22a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C12a)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C12b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C21b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C11a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C21b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C21b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C21b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C11b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C11a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C22a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C12b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C22b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C21b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C21b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C11a)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C11b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C21a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C21a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C11a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C21a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C22a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C12b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C21b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C12b)
+[Depth 3] Thread 6 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C11b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C11b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C21a)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C11b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C21a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C21a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C11a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C22a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C22a)
+[Depth 3] Thread 5 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C22a-C22a)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C21b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C21a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C11b)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C22a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C12a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C12a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C12a)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C22a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C12a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C22b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C11a)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C11b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C21b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C11a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C21a)
+[Depth 3] Thread 4 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 0 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C21b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C22a-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C11b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C21a)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C22b)
+[Depth 3] Thread 1 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C12a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C22b-C11b)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C22b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C11b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11a-C11a-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C12a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C11a)
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C22b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C11a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C21a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C21a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C11a-C12a)
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C21b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C21a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C22b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11a-C21a-C21a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C21b)
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C12a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C11a-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C21a)
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C22a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C11b)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C21b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C22a-C12b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C11b)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C11a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C12b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C21a)
+[Depth 3] Thread 3 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21b-C22a-C11b)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C12b)
+[Depth 3] Thread 2 completed 32x32 multiplication (32768 ops)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C21b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C21b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C21a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C22a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C22b)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C12b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C21b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C21b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C11b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C22b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21b-C12a-C11a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C11b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C11b)
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C22a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C22a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C11b)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C21a-C11a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C21b-C12a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C21a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C22b-C21b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C21b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C11a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12b-C11b-C12b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C12a)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C22a-C11b-C11b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C22b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C21a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C12a-C21b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C22b)
+[Depth 3] Thread 2 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C11b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C21b-C21b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C12b-C22b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C22b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C21b)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C11a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C21a-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C22a)
+[Depth 2] Thread 2 combined 64x64 result
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C21b)
+[Depth 2] Thread 2 combined 64x64 result
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C12a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C21b-C11b-C21b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C21a)
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C11b-C12b-C12b)
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C22a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C12b-C22b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C21a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C12b-C12a-C11a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12b-C22b-C12a)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21b-C11a-C22b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C21a-C12a-C22b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C21a-C11b-C22a)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C21a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C21a-C11a-C12b)
+[Depth 3] Thread 4 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C21a)
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C12a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C12b)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C12a-C12a-C12a)
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11b-C21b-C12a)
+[Depth 2] Thread 2 combined 64x64 result
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 3] Thread 1 multiplying 32x32 matrices (task: ROOT-C11a-C22a-C12a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C11a)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C21b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C12a-C21a-C22a)
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C22a-C22a-C22b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22a-C12b-C22a)
+[Depth 3] Thread 0 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C11a)
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22a-C11a-C12b)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C11b-C22a)
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C11b-C22b-C22a)
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11b-C22a-C22b)
+[Depth 3] Thread 7 multiplying 32x32 matrices (task: ROOT-C11a-C21b-C22b)
+[Depth 3] Thread 6 multiplying 32x32 matrices (task: ROOT-C22b-C12b-C21b)
+[Depth 2] Thread 2 combined 64x64 result
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C12a-C12b-C12b)
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 2] Thread 4 combined 64x64 result
+[Depth 3] Thread 5 multiplying 32x32 matrices (task: ROOT-C22b-C11b-C22a)
+[Depth 2] Thread 2 combined 64x64 result
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 2] Thread 1 combined 64x64 result
+[Depth 2] Thread 7 combined 64x64 result
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 3] Thread 3 multiplying 32x32 matrices (task: ROOT-C22b-C11a-C12b)
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 2] Thread 0 combined 64x64 result
+[Depth 1] Thread 6 combined 128x128 result
+Mismatch at [0][0]: 5215 vs 5595
+
+------------------------------------------------------------
+✅ Test Results: Large Matrix
+------------------------------------------------------------
+Matrix size: 256x256
+Max recursion depth: 3
+Block size: 32x32
+Total threads created: 585
+Total operations: 16,777,216
+
+Performance:
+  Serial time: 37ms
+  Parallel time: 4715ms
+  Speedup: 0.01x
+  Operations/sec: 3,558,264
+  Memory used: 1.39 MB
+
+Verification:
+  Result matches expected: ❌ FAIL
+------------------------------------------------------------
+
+[Depth 2] Thread 3 combined 64x64 result
+[Depth 1] Thread 4 combined 128x128 result
+[Depth 1] Thread 3 combined 128x128 result
+[Depth 2] Thread 6 combined 64x64 result
+[Depth 1] Thread 0 combined 128x128 result
+[Depth 2] Thread 5 combined 64x64 result
+[Depth 1] Thread 2 combined 128x128 result
+[Depth 0] Thread 0 combined 256x256 result
+
+============================================================
+Test: Extra Large Matrix
+Matrix size: 512x512
+Max recursion depth: 3
+Block size: 64x64
+============================================================
+
+Generating matrices...
+Calculating expected result (serial)...
+Serial multiplication took 347ms
+
+[Depth 0] Thread 0 multiplying 512x512 matrices (task: ROOT)
+[Depth 0] Thread 0 splitting 512x512 into quadrants
+[Depth 1] Thread 0 multiplying 256x256 matrices (task: ROOT-C11a)
+[Depth 1] Thread 2 multiplying 256x256 matrices (task: ROOT-C11b)
+[Depth 1] Thread 1 multiplying 256x256 matrices (task: ROOT-C12a)
+[Depth 1] Thread 3 multiplying 256x256 matrices (task: ROOT-C12b)
+[Depth 1] Thread 0 splitting 256x256 into quadrants
+[Depth 1] Thread 4 multiplying 256x256 matrices (task: ROOT-C21a)
+[Depth 1] Thread 2 splitting 256x256 into quadrants
+[Depth 1] Thread 5 multiplying 256x256 matrices (task: ROOT-C22a)
+[Depth 1] Thread 1 splitting 256x256 into quadrants
+[Depth 1] Thread 7 multiplying 256x256 matrices (task: ROOT-C22b)
+[Depth 1] Thread 6 multiplying 256x256 matrices (task: ROOT-C21b)
+[Depth 1] Thread 3 splitting 256x256 into quadrants
+[Depth 1] Thread 4 splitting 256x256 into quadrants
+[Depth 1] Thread 5 splitting 256x256 into quadrants
+[Depth 1] Thread 6 splitting 256x256 into quadrants
+[Depth 1] Thread 7 splitting 256x256 into quadrants
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C11a-C11b)
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C12a-C12b)
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C12a-C22b)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C12a-C11a)
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C12a-C21b)
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C11b-C21b)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C11a-C11a)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C11a-C12a)
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C12b-C21b)
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C11b-C21a)
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C22a-C21b)
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C12a-C11b)
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C11a-C12b)
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C11a-C21b)
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C11a-C22a)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C22b-C22b)
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C21a-C11b)
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C21b-C12b)
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C11a-C21a)
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C11b-C22b)
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C12a-C22a)
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C22b-C11b)
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C22a-C12a)
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C12b-C12b)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C12b-C22b)
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C21a-C22b)
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C21a-C12b)
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C22a-C12b)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C12b-C11b)
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C12b-C11a)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C21b-C21b)
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C21b-C11b)
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C22a-C22a)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C11b-C12a)
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C22b-C21b)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C22a-C21a)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C22a-C11a)
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C21b-C12a)
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C22b-C12b)
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 3 multiplying 128x128 matrices (task: ROOT-C11b-C12b)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C11b-C11a)
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C21a-C22a)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C21a-C12a)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C21a-C11a)
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C21b-C22b)
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C21b-C21a)
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C12b-C22a)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C12b-C12a)
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C22b-C22a)
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C12a-C21a)
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C22a-C22b)
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C11b-C22a)
+[Depth 2] Thread 7 multiplying 128x128 matrices (task: ROOT-C11a-C22b)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C22b-C11a)
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C12b-C21a)
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C21a-C21a)
+[Depth 2] Thread 3 splitting 128x128 into quadrants
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C22a-C11b)
+[Depth 2] Thread 5 multiplying 128x128 matrices (task: ROOT-C21b-C22a)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C22b-C12a)
+[Depth 2] Thread 7 splitting 128x128 into quadrants
+[Depth 2] Thread 4 multiplying 128x128 matrices (task: ROOT-C22b-C21a)
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 2] Thread 4 splitting 128x128 into quadrants
+[Depth 2] Thread 5 splitting 128x128 into quadrants
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C12a)
+[Depth 2] Thread 6 multiplying 128x128 matrices (task: ROOT-C21a-C21b)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 1 multiplying 128x128 matrices (task: ROOT-C12a-C12a)
+[Depth 2] Thread 0 multiplying 128x128 matrices (task: ROOT-C21b-C11a)
+[Depth 2] Thread 0 splitting 128x128 into quadrants
+[Depth 2] Thread 6 splitting 128x128 into quadrants
+[Depth 2] Thread 1 splitting 128x128 into quadrants
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C11a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C11a)
+[Depth 2] Thread 2 multiplying 128x128 matrices (task: ROOT-C11b-C11b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C22b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C12a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C11b)
+[Depth 2] Thread 2 splitting 128x128 into quadrants
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C22b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C11b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C21b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C21b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C22b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C11a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C22a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C12a)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C11b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C21a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C11a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C21a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C21b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C11b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C12b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C21b)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C12a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C11a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C12b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C11b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C11b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C11b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C21a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C22b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C21b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C11a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C21b-C12a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C21a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C21a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C11b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C11a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C11b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C11b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C22a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C22b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C22b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C12a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C21a)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C22b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C21a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C12a-C21b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C11b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C21a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C11a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C11a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C21a)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C11a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C21b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C11a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C12b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C11a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C22b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C11a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C12a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C22b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C12a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C12b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C11a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C11a)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C11b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C21a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C11a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C11b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C22b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C21a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C12a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C22a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C12b)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C21a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C12b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C11b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C21b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C11a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C21a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C21a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C21b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C12a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C22a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C22a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C21b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C22b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C11a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C11b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C12a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C22b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C11b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C21a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C21a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C22a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C12a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C12a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C22b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C21a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C11a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C21b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C22b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C11b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C12b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C12a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C21a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C12b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C21b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C21b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C21a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C22b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C22a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C11b-C12a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C21a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C12a)
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C22a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C11b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C21a)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C22a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C11b)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C22b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C22b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C21b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C21b)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C21a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C12b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C12b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C22b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C22b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C22b-C11a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C22b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C21b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C11b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C22a-C12a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C21a)
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C21b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C21b-C12b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C12a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C11b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C22b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C12b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C11a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C21a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C11a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C21b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C12a-C22a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C12a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C11a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C21a)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C21a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C21b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C22a-C21b)
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C11a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C22a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C12a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C11b)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C21b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C12b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C11b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C21b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C11b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C22a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C12b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C12a)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C22b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C11a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C11b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C12b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C21a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C22a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C21b-C21b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C21b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C11a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C12b)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C21a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C21b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C22b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C22b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C11a)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C12b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C21a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C11a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C22b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C22a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C22b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C11b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C11a-C22b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C22b)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C12b)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C21b-C11a)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C21a-C22b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C11a)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C22a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C21b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C12a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C11b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11a-C22b-C21a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C21b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C11a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C12a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C11a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C12b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C11b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C22b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C22b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C11b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C21b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C11b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C21b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C11b-C21b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C11a-C22a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C12b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C22a-C12b)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C22b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C22a)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C11a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C12b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C21b)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C21a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C22a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C21a)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C11b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C11b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C22b)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C22a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C22b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C11a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C22a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C12a)
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C21b)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C22b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C12b)
+[Depth 3] Thread 7 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C11a)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C11b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C21b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C12a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C21a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C11b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12b-C11a-C12b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C21b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11a-C22a-C22b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C11b)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C21b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22b-C22b-C22b)
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 3] Thread 1 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C11a)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C21b-C11b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C11a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C21a-C22b-C21b)
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12a-C11b-C21b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C12a)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21a-C12b-C11a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C12a-C11a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C22a)
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C22a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11a-C11b-C12b)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C22b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C21a-C12b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C11a)
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C21a-C12a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C11a-C21b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C11b)
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 1] Thread 0 combined 256x256 result
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22b-C11b-C22a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C12a-C21a-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C21a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C12a-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C22a)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C22a)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C12a-C11a)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 5 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C11b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C11b-C21a-C11a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C22b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C12a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C11a-C21a)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C11a)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C11b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C12a)
+[Depth 3] Thread 2 completed 64x64 multiplication (262144 ops)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 3] Thread 0 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C21b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C12a-C11b)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C12a)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C21b-C21a-C22a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C21a)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C12a-C12b-C12b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C21b)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C22b-C11a-C11a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C21a)
+[Depth 3] Thread 0 multiplying 64x64 matrices (task: ROOT-C12b-C21a-C11a)
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C21a)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C22b-C22a-C12a)
+[Depth 3] Thread 1 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C12a)
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C21a-C12b)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22a-C12b-C12b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21a-C12a-C12b)
+[Depth 1] Thread 1 combined 256x256 result
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 3] Thread 4 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C21a)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C21b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C12b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C12b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C22b-C12b-C12b)
+[Depth 2] Thread 4 combined 128x128 result
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C12b-C22a-C21b)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C21b-C12b-C12b)
+[Depth 3] Thread 2 multiplying 64x64 matrices (task: ROOT-C21b-C11a-C11b)
+[Depth 2] Thread 1 combined 128x128 result
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C22a-C12b)
+[Depth 3] Thread 6 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C21b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C22a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C11b-C12b-C22b)
+[Depth 3] Thread 4 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 6 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C22b-C22b)
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C11b-C21b-C22a)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C22a-C11b-C22b)
+[Depth 3] Thread 3 completed 64x64 multiplication (262144 ops)
+[Depth 3] Thread 7 multiplying 64x64 matrices (task: ROOT-C21b-C22a-C22b)
+[Depth 1] Thread 4 combined 256x256 result
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 3] Thread 5 multiplying 64x64 matrices (task: ROOT-C22a-C22b-C22a)
+[Depth 3] Thread 3 multiplying 64x64 matrices (task: ROOT-C11b-C11b-C12b)
+[Depth 2] Thread 0 combined 128x128 result
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 2] Thread 3 combined 128x128 result
+[Depth 1] Thread 7 combined 256x256 result
+[Depth 2] Thread 6 combined 128x128 result
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 2] Thread 7 combined 128x128 result
+[Depth 2] Thread 5 combined 128x128 result
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 2] Thread 2 combined 128x128 result
+[Depth 1] Thread 3 combined 256x256 result
+[Depth 1] Thread 2 combined 256x256 result
+Mismatch at [0][0]: 9951 vs 10327
+
+------------------------------------------------------------
+✅ Test Results: Extra Large Matrix
+------------------------------------------------------------
+Matrix size: 512x512
+Max recursion depth: 3
+Block size: 64x64
+Total threads created: 585
+Total operations: 134,217,728
+
+Performance:
+  Serial time: 347ms
+  Parallel time: 4772ms
+  Speedup: 0.07x
+  Operations/sec: 28,126,095
+  Memory used: 5.23 MB
+
+Verification:
+  Result matches expected: ❌ FAIL
+------------------------------------------------------------
+
+
+============================================================
+All Matrix Tests Complete!
+Total duration: 0.29 minutes
+============================================================
+[Depth 1] Thread 5 combined 256x256 result
+[Depth 0] Thread 0 combined 512x512 result
+[Depth 1] Thread 6 combined 256x256 result
+
+──────────────────────────────────────────────────────────────────────
+✅ Matrix Multiplication COMPLETED SUCCESSFULLY
+Duration: 0.30 minutes
+──────────────────────────────────────────────────────────────────────
+
+
+
+
+╔═══════════════════════════════════════════════════════════════╗
+║                      TEST SUITE SUMMARY                       ║
+╚═══════════════════════════════════════════════════════════════╝
+
+  ✅ PASS  Recursive Merge Sort      0.12m
+  ✅ PASS  Binary Tree Traversal     0.17m
+  ✅ PASS  Matrix Multiplication     0.30m
+
+  Total Duration: 0.76 minutes
+  Tests Passed: 3 / 3
+
+  🎉 ALL TESTS PASSED! 🎉
+
+  The ThreadPool framework successfully handled:
+    ✓ Recursive ThreadPool creation
+    ✓ Deep recursion (up to 10+ levels)
+    ✓ Hundreds of concurrent threads
+    ✓ Complex computational workloads
+    ✓ Proper resource cleanup
+    ✓ Correct result verification
+
+╚═══════════════════════════════════════════════════════════════╝
+
+
+Process finished with exit code 0
+
+

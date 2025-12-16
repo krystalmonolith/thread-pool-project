@@ -13,6 +13,7 @@ interface MatrixTask {
   maxDepth: number;
   blockSize: number;
   taskId: string;
+  threadFuncString?: string;  // ⭐ Pass function as string for recursion
 }
 
 interface MatrixResult {
@@ -258,13 +259,25 @@ function createRecursiveMatrixTask(
         
         const queue = new ThreadQueue(`matrix-depth-${task.depth}`);
         
-        // Recreate this same function for child tasks
-        const createSubTask = (ma: any[][], mb: any[][], d: number, md: number, bs: number, tid: string) => {
-          return new ThreadTask(threadFunc, of({ a: ma, b: mb, depth: d, maxDepth: md, blockSize: bs, taskId: tid }));
-        };
+        // Reconstruct the function from the passed string for recursion
+        const funcString = task.threadFuncString || '';
+        const recreatedFunc = new Function('input', 'threadId', 
+          'return (' + funcString + ')(input, threadId)'
+        );
         
         tasks.forEach((t) => {
-          const subTask = createSubTask(t.a, t.b, task.depth + 1, task.maxDepth, task.blockSize, `${task.taskId}-${t.name}`);
+          const subTask = new ThreadTask(
+            recreatedFunc as any,
+            of({ 
+              a: t.a, 
+              b: t.b, 
+              depth: task.depth + 1, 
+              maxDepth: task.maxDepth, 
+              blockSize: task.blockSize, 
+              taskId: `${task.taskId}-${t.name}`,
+              threadFuncString: funcString
+            })
+          );
           queue.enqueue(subTask);
         });
         
@@ -325,7 +338,21 @@ function createRecursiveMatrixTask(
     );
   };
   
-  return new ThreadTask(threadFunc, of({ a, b, depth, maxDepth, blockSize, taskId }));
+  // Serialize the function to pass it along for recursion
+  const threadFuncString = threadFunc.toString();
+  
+  return new ThreadTask(
+    threadFunc,
+    of({ 
+      a, 
+      b, 
+      depth, 
+      maxDepth, 
+      blockSize, 
+      taskId,
+      threadFuncString  // ⭐ Pass function string for recursive calls
+    })
+  );
 }
 
 /**

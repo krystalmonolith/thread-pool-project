@@ -16,6 +16,7 @@ interface TreeTask {
   maxDepth: number;
   currentDepth: number;
   taskId: string;
+  threadFuncString?: string;  // ⭐ Pass function as string for recursion
 }
 
 interface TreeResult {
@@ -165,19 +166,38 @@ function createRecursiveTreeTask(
         // Recursive case: create ThreadPool for children
         console.log(`[Depth ${task.currentDepth}] Thread ${threadId} spawning child threads`);
         
+        // Reconstruct the function from the passed string for recursion
+        const funcString = task.threadFuncString || '';
+        const recreatedFunc = new Function('input', 'threadId', 
+          'return (' + funcString + ')(input, threadId)'
+        );
+        
         const childTasks: any[] = [];
         
-        // Recreate this same function for child tasks
-        const createSubTask = (n: any, md: number, cd: number, tid: string) => {
-          return new ThreadTask(threadFunc, of({ node: n, maxDepth: md, currentDepth: cd, taskId: tid }));
-        };
-        
         if (task.node.left) {
-          childTasks.push(createSubTask(task.node.left, task.maxDepth, task.currentDepth + 1, `${task.taskId}-L`));
+          childTasks.push(new ThreadTask(
+            recreatedFunc as any,
+            of({ 
+              node: task.node.left, 
+              maxDepth: task.maxDepth, 
+              currentDepth: task.currentDepth + 1, 
+              taskId: `${task.taskId}-L`,
+              threadFuncString: funcString
+            })
+          ));
         }
         
         if (task.node.right) {
-          childTasks.push(createSubTask(task.node.right, task.maxDepth, task.currentDepth + 1, `${task.taskId}-R`));
+          childTasks.push(new ThreadTask(
+            recreatedFunc as any,
+            of({ 
+              node: task.node.right, 
+              maxDepth: task.maxDepth, 
+              currentDepth: task.currentDepth + 1, 
+              taskId: `${task.taskId}-R`,
+              threadFuncString: funcString
+            })
+          ));
         }
         
         if (childTasks.length === 0) {
@@ -248,7 +268,19 @@ function createRecursiveTreeTask(
     );
   };
   
-  return new ThreadTask(threadFunc, of({ node, maxDepth, currentDepth, taskId }));
+  // Serialize the function to pass it along for recursion
+  const threadFuncString = threadFunc.toString();
+  
+  return new ThreadTask(
+    threadFunc, 
+    of({ 
+      node, 
+      maxDepth, 
+      currentDepth, 
+      taskId,
+      threadFuncString  // ⭐ Pass function string for recursive calls
+    })
+  );
 }
 
 /**
