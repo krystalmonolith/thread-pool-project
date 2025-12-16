@@ -26,3 +26,6 @@ coverage/
 # Misc
 .env
 .env.local
+
+# Test Output Files
+**/*.output.txt

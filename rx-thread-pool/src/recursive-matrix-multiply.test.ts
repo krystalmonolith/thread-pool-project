@@ -410,7 +410,8 @@ function createExpected(name: string, size: number, maxDepth: number, blockSize:
     const expectedStart = Date.now();
     const expected = multiplyMatrices(matrixA, matrixB);
     const expectedTime = Date.now() - expectedStart;
-    console.log(`Serial multiplication took ${expectedTime}ms\n`);
+    console.log(`Serial multiplication took ${expectedTime}ms\n\n`);
+    console.log(`${'='.repeat(60)}\n`);
     return {expected, expectedTime};
 }
 
@@ -515,21 +516,23 @@ async function runAllTests() {
     const overallStart = Date.now();
 
     const tests = [
-        {name: "Medium Matrix", size: 256, blocksizes: [16, 32, 64, 128]},
-        {name: "Large Matrix", size: 512, blocksizes: [16, 32, 64, 128, 256]},
-        {name: "Mega Matrix", size: 1024, blocksizes: [16, 32, 64, 128, 256, 512]},
-        {name: "Mega2 Matrix", size: 2048, blocksizes: [16, 32, 64, 128, 256, 512, 1024]},
+        {name: "Medium Matrix", size: 256, maxDepths: [2], blocksizes: [16, 32, 64, 128]},
+        {name: "Large Matrix", size: 512, maxDepths: [2], blocksizes: [16, 32, 64, 128, 256]},
+        {name: "Mega Matrix", size: 1024, maxDepths: [2], blocksizes: [16, 32, 64, 128, 256, 512]},
+        {name: "Mega2 Matrix", size: 2048, maxDepths: [2], blocksizes: [16, 32, 64, 128, 256, 512, 1024]},
     ]
 
     for (const test of tests) {
         const {matrixA, matrixB} = createTestMatrices(test.size);
         let expected: ExpectedResultTime | null = null;
-        for (const blockSize of test.blocksizes) {
-            printPreface(test.name, test.size, 2, blockSize);
-            if (!expected) {
-                expected = createExpected(test.name, test.size, 2, blockSize, matrixA, matrixB);
+        for (const maxDepth of test.maxDepths) {
+            for (const blockSize of test.blocksizes) {
+                printPreface(test.name, test.size, maxDepth, blockSize);
+                if (!expected) {
+                    expected = createExpected(test.name, test.size, maxDepth, blockSize, matrixA, matrixB);
+                }
+                await runMatrixTest(test.name, test.size, maxDepth, blockSize, matrixA, matrixB, expected);
             }
-            await runMatrixTest(test.name, test.size, 2, blockSize, matrixA, matrixB, expected);
         }
     }
 

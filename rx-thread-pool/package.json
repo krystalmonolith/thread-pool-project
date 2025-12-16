@@ -17,6 +17,8 @@
     "test-recursive-tree": "node dist/recursive-tree-traversal.test.js",
     "pretest-recursive-matrix": "npm run pretest",
     "test-recursive-matrix": "node dist/recursive-matrix-multiply.test.js",
+    "pretest-recursive-matrixfile": "npm run pretest",
+    "test-recursive-matrixfile": "node dist/recursive-matrix-multiply.test.js > recursive-matrix-multiply.test.output.txt",
     "pretest-recursive-all": "npm run pretest",
     "test-recursive-all": "node dist/run-all-recursive-tests.js",
     "pretest-recursive-allfile": "npm run pretest",
