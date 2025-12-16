@@ -6,7 +6,7 @@ import { AbstractThreadTask } from './AbstractThreadTask';
  */
 export class ThreadQueue {
   private queue: AbstractThreadTask[];
-  private name: string;
+  private readonly name: string;
 
   /**
    * Constructor for ThreadQueue

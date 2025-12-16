@@ -1,6 +1,5 @@
-import { Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs';
-import { ThreadTask, ThreadQueue, ThreadPool } from './index';
+import {mergeMap, Observable, of} from 'rxjs';
+import {ThreadPool, ThreadQueue, ThreadTask} from './index';
 
 console.log('=== Recursive Parallel Matrix Multiplication Test ===\n');
 
