@@ -1,7 +1,38 @@
+import * as fs from 'node:fs'
 import {mergeMap, Observable, of} from 'rxjs';
 import {ThreadPool, ThreadQueue, ThreadTask} from './index';
 
 console.log('=== Recursive Parallel Matrix Multiplication Test ===\n');
+
+interface ResultRecord extends Record<string, any>{
+    name: string;
+    size: number;
+    maxDepth: number;
+    blockSize: number;
+    totalThreadsCreated: number;
+    isCorrect: boolean;
+    totalOperations: number;
+    serialTimeMsec: number;
+    parallelTimeMsec: number;
+    speedup: number;
+    operationsPerSec: number;
+}
+
+const csvKeyOrder = [
+    "name",
+    "size",
+    "blockSize",
+    "maxDepth",
+    "isCorrect",
+    "speedup",
+    "serialTimeMsec",
+    "parallelTimeMsec",
+    "totalThreadsCreated",
+    "totalOperations",
+    "operationsPerSec",
+];
+
+const csvResults: Array<ResultRecord> = [];
 
 type Matrix = number[][];
 
@@ -489,6 +520,22 @@ async function runMatrixTest(
     const isCorrect = matricesEqual(result.result, expected.expected);
     const speedup = expected.expectedTime / duration;
 
+    const rr: ResultRecord = {
+        name,
+        size,
+        blockSize,
+        speedup,
+        maxDepth,
+        isCorrect,
+        totalThreadsCreated: result.threadsCreated,
+        parallelTimeMsec: duration,
+        serialTimeMsec: expected.expectedTime,
+        operationsPerSec: Math.floor(result.operations / (duration / 1000)),
+        totalOperations: result.operations
+    }
+
+    csvResults.push(rr);
+
     console.log(`\n${'-'.repeat(60)}`);
     console.log(`✅ Test Results: ${name}`);
     console.log(`${'-'.repeat(60)}`);
@@ -501,11 +548,12 @@ async function runMatrixTest(
     console.log(`  Serial time: ${expected.expectedTime}ms`);
     console.log(`  Parallel time: ${duration}ms`);
     console.log(`  Speedup: ${speedup.toFixed(2)}x`);
-    console.log(`  Operations/sec: ${Math.floor(result.operations / (duration / 1000)).toLocaleString()}`);
+    console.log(`  Operations/sec: ${rr.operationsPerSec.toLocaleString()}`);
     console.log(`  Memory used: ${memoryUsed.toFixed(2)} MB`);
     console.log(`\nVerification:`);
     console.log(`  Result matches expected: ${isCorrect ? '✅ PASS' : '❌ FAIL'}`);
     console.log(`${'-'.repeat(60)}\n`);
+
 }
 
 // Run all tests
@@ -542,6 +590,19 @@ async function runAllTests() {
     console.log('All Matrix Tests Complete!');
     console.log(`Total duration: ${(overallDuration / 1000 / 60).toFixed(2)} minutes`);
     console.log(`${'='.repeat(60)}`);
+
+    let csv = csvKeyOrder.join(',') + "\n";
+    for (const rr of csvResults) {
+        let l = "";
+        for (const key of csvKeyOrder) {
+            if (l.length > 0) {
+                l += ',';
+            }
+            l += "" + rr[key];
+        }
+        csv += l + '\n';
+    }
+    fs.writeFileSync("recursive-matrix-multiply.csv", csv, 'utf-8');
 }
 
 // Run the tests

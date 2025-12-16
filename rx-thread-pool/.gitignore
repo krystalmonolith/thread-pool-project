@@ -29,3 +29,4 @@ coverage/
 
 # Test Output Files
 **/*.output.txt
+/recursive-matrix-multiply.csv
