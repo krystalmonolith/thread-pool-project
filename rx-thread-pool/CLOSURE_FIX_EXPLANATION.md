@@ -44,9 +44,8 @@ function createRecursiveSortTask(...) {
   const threadFunc = (input, threadId) => {
     return input.pipe(
       mergeMap(async (task) => {
-        // Import modules in worker context
-        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
-        const { of } = require('rxjs');
+        // ThreadTask, ThreadQueue, ThreadPool, of, mergeMap 
+        // are available in worker context (provided by worker.js)
         
         // Define helpers in worker scope
         function mergeSorted(left, right) { ... }
@@ -66,16 +65,32 @@ function createRecursiveSortTask(...) {
 }
 ```
 
-### 2. Import Modules Inside Worker Context
+### 2. Framework Classes Available in Worker Context
 
-```typescript
-// Inside thread function:
-const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
-const { of } = require('rxjs');
-const { mergeMap } = require('rxjs');
+The updated `worker.js` imports and exposes framework classes:
+
+```javascript
+// worker.js
+const framework = require('./index.js');
+
+const context = {
+  // RxJS operators
+  rxjs, of, mergeMap, ...
+  // Framework classes for recursive tasks
+  ThreadTask: framework.ThreadTask,
+  ThreadQueue: framework.ThreadQueue,
+  ThreadPool: framework.ThreadPool
+};
 ```
 
-This ensures workers have access to necessary modules.
+Now inside thread functions, these are available without `require()`:
+
+```typescript
+// Inside thread function - classes are available!
+const createSubTask = (arr, d, md, tid) => {
+  return new ThreadTask(threadFunc, of({ array: arr, ... }));
+};
+```
 
 ### 3. Use Local Factory Function for Recursion
 
@@ -97,28 +112,33 @@ The `createSubTask` function creates new ThreadTask instances using the same `th
 ### Merge Sort (`recursive-merge-sort.test.ts`)
 ✅ `mergeSorted()` helper now defined inside thread function  
 ✅ `createSubTask()` factory for creating child tasks  
-✅ Modules imported with `require()` in worker context  
+✅ Uses ThreadTask, ThreadQueue, ThreadPool from worker context (no require())  
 
 ### Tree Traversal (`recursive-tree-traversal.test.ts`)
 ✅ `calculateTreeStats()` helper now inside thread function  
 ✅ `createSubTask()` factory for child tree nodes  
-✅ Modules imported in worker context  
+✅ Uses framework classes from worker context (no require())  
 
 ### Matrix Multiply (`recursive-matrix-multiply.test.ts`)
 ✅ All matrix helpers (`multiplyMatrices`, `addMatrices`, `splitMatrix`, `combineMatrix`, `countOperations`) now inside thread function  
 ✅ `createSubTask()` factory for sub-matrix tasks  
-✅ Modules imported in worker context  
+✅ Uses framework classes from worker context (no require())
+
+### Updated worker.js
+✅ Imports framework classes (ThreadTask, ThreadQueue, ThreadPool)  
+✅ Provides them in execution context alongside RxJS operators  
+✅ Enables recursive ThreadPool creation in workers  
 
 ## Key Principle
 
 **Worker threads are isolated environments.** They only have access to:
 - What's serialized in the function itself
-- Modules explicitly imported with `require()`
+- Variables provided by worker.js in the execution context (RxJS operators, framework classes)
 - Data passed through the Observable input
 
 They cannot access:
-- Outer scope variables
-- Functions defined outside the thread function
+- Outer scope variables from the main thread
+- Functions defined outside the thread function (unless provided by worker.js)
 - ES6 imports from the parent context
 
 ## Testing

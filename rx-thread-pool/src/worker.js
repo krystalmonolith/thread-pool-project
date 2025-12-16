@@ -2,6 +2,11 @@ const { parentPort, workerData } = require('worker_threads');
 const rxjs = require('rxjs');
 const operators = require('rxjs/operators');
 
+// Import framework classes for recursive tasks
+const path = require('path');
+const frameworkPath = path.join(__dirname, 'index.js');
+const framework = require(frameworkPath);
+
 if (parentPort) {
   const { functionString, inputData, threadId } = workerData;
 
@@ -18,7 +23,7 @@ if (parentPort) {
     processedFunctionString = processedFunctionString.replace(/import_rxjs\d*/g, 'rxjs');
     processedFunctionString = processedFunctionString.replace(/import_operators\d*/g, 'operators');
     
-    // Create a context with rxjs available
+    // Create a context with rxjs and framework classes available
     const context = {
       rxjs: rxjs,
       operators: operators,
@@ -38,7 +43,11 @@ if (parentPort) {
       take: rxjs.take,
       skip: rxjs.skip,
       first: rxjs.first,
-      last: rxjs.last
+      last: rxjs.last,
+      // Framework classes for recursive tasks
+      ThreadTask: framework.ThreadTask,
+      ThreadQueue: framework.ThreadQueue,
+      ThreadPool: framework.ThreadPool
     };
     
     // Create function with context

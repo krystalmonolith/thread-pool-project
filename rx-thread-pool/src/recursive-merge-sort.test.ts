@@ -51,10 +51,7 @@ function createRecursiveSortTask(
   const threadFunc = (input: Observable<SortTask>, threadId: number) => {
     return input.pipe(
       mergeMap(async (task) => {
-        // Import required modules in worker context
-        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
-        const { of } = require('rxjs');
-        const { mergeMap } = require('rxjs');
+        // ThreadTask, ThreadQueue, ThreadPool, of, mergeMap are available in worker context
         
         console.log(`[Depth ${task.depth}] Thread ${threadId} sorting ${task.array.length} elements (task: ${task.taskId})`);
         

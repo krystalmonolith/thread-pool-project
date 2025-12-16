@@ -156,10 +156,7 @@ function createRecursiveMatrixTask(
   const threadFunc = (input: Observable<MatrixTask>, threadId: number) => {
     return input.pipe(
       mergeMap(async (task) => {
-        // Import required modules in worker context
-        const { ThreadTask, ThreadQueue, ThreadPool } = require('./index');
-        const { of } = require('rxjs');
-        const { mergeMap } = require('rxjs');
+        // ThreadTask, ThreadQueue, ThreadPool, of, mergeMap are available in worker context
         
         const size = task.a.length;
         console.log(`[Depth ${task.depth}] Thread ${threadId} multiplying ${size}x${size} matrices (task: ${task.taskId})`);
