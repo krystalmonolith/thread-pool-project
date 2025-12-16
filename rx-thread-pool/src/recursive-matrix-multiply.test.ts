@@ -312,11 +312,16 @@ function createRecursiveMatrixTask(
         // Sort results by task name to maintain order
         subResults.sort((a, b) => a.taskId.localeCompare(b.taskId));
         
-        // Combine results
-        const c11 = addMatrices(subResults[0].result, subResults[2].result);
-        const c12 = addMatrices(subResults[1].result, subResults[3].result);
-        const c21 = addMatrices(subResults[4].result, subResults[6].result);
-        const c22 = addMatrices(subResults[5].result, subResults[7].result);
+        // After alphabetical sort: [C11a, C11b, C12a, C12b, C21a, C21b, C22a, C22b]
+        // Combine correctly:
+        // C11 = C11a + C11b (A11*B11 + A12*B21) = [0] + [1]
+        // C12 = C12a + C12b (A11*B12 + A12*B22) = [2] + [3]
+        // C21 = C21a + C21b (A21*B11 + A22*B21) = [4] + [5]
+        // C22 = C22a + C22b (A21*B12 + A22*B22) = [6] + [7]
+        const c11 = addMatrices(subResults[0].result, subResults[1].result);
+        const c12 = addMatrices(subResults[2].result, subResults[3].result);
+        const c21 = addMatrices(subResults[4].result, subResults[5].result);
+        const c22 = addMatrices(subResults[6].result, subResults[7].result);
         
         const result = combineMatrix(c11, c12, c21, c22);
         const totalThreads = subResults.reduce((sum, r) => sum + r.threadsCreated, 0) + 1;
