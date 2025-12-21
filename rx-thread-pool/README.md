@@ -65,10 +65,29 @@ worker threads add valuable parallel processing capabilities to Node.js, they in
 and message serialization, so they're most beneficial for computationally expensive operations rather than I/O tasks,
 which are already handled efficiently by Node's asynchronous, non-blocking architecture.
 
+## Files in `rx-thread-pool/src`
+### Package Source Code
+- AbstractThreadTask.ts
+- ThreadQueue.ts
+- ThreadPool.ts
+- worker.js
+- index.ts
+### Non-Recursive Example and Smoke Test Code
+- example/example.ts
+- example/advanced-example.ts
+### Recursive Example and Stress Test Code
+- test/recursive-matrix-multiply.test.ts
+  - Writes a small CSV file with a test result summary to the rx-thread-pool directory.
+  - Filename: **YYYYMMDDThhmmss**-recursive-matrix-multiply.csv
+- test/recursive-merge-sort.test.ts
+- test/recursive-tree-traversal.test.ts
+- test/run-all-recursive-tests.ts
+- test/timestamp.ts
+
 
 ## Core Classes
 
-### interface AbstractThreadTask
+### interface [AbstractThreadTask](src/AbstractThreadTask.ts)
 
 - Abstract base class for creating thread tasks. 
 - Contains a callback function (threadFunc) that will be executed in a worker thread.
@@ -84,7 +103,7 @@ class AbstractThreadTask<T, I extends Observable<T>, V, R extends Observable<V>>
 - `V` - Output observable value type
 - `R` - Output observable type
 
-### class ThreadTask
+### class [ThreadTask](src/AbstractThreadTask.ts)
 
 Concrete implementation of AbstractThreadTask for creating executable tasks.
 
@@ -99,7 +118,7 @@ const task = new ThreadTask(
 );
 ```
 
-### ThreadQueue
+### class [ThreadQueue](src/ThreadQueue.ts)
 
 FIFO queue for managing ThreadTask instances.
 
@@ -118,7 +137,7 @@ queue.enqueue(task2);
 - `getAllTasks()` - Get all tasks as array
 - `clear()` - Remove all tasks
 
-### ThreadPool
+### class [ThreadPool](src/ThreadPool.ts)
 
 Manages a pool of worker threads that execute tasks from queues.
 
@@ -272,7 +291,8 @@ interface ThreadResult<V> {
 
 - Functions passed to workers must be serializable (no closures over external variables)
 - Shared memory via SharedArrayBuffer is not tested (yet)... Use RxJS streams to avoid race conditions.
-- Worker startup has overhead - better for longer-running tasks
+- Worker startup has overhead - Better for longer-running tasks
+- IDE Debuggers segfault when breakpoints are in the threaded code... YMMV.
 
 ## Building from Source
 

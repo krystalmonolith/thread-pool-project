@@ -516,7 +516,7 @@ async function runAllTests() {
         csv += l + '\n';
     }
     console.log(`Writing matrix test results to CSV file: ${csvOutputFileName}: ${csv.length} characters`);
-    fs.writeFileSync(__dirname + '/../' + csvOutputFileName, csv, 'utf-8');
+    fs.writeFileSync(__dirname + '/../../' + csvOutputFileName, csv, 'utf-8');
 }
 
 // Run the tests
