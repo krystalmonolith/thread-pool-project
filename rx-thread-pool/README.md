@@ -1,21 +1,5 @@
 # @krystalmonolith/rx-thread-pool
 
-A multi-threading framework melding Worker Threads and RxJS Observables. This library provides a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
-
-## Acknowledgments
-This project was developed with _significant_ assistance from [Claude](https://claude.ai) (Anthropic).
-
-*"ODNT": Old Dogs, New Tricks!*
-
-## Features
-
-- 🚀 **Worker Thread Pool**: Automatically manages thread pool based on available CPU cores
-- 📦 **Type-Safe**: Full TypeScript support with generics
-- 🔄 **RxJS Integration**: Built on RxJS v7 Observables for reactive programming
-- 📋 **FIFO Queue**: Multiple task queues with first-in-first-out execution
-- ⚡ **Parallel Execution**: Execute multiple tasks concurrently across threads
-- 🎯 **Thread Tracking**: Unique thread IDs for monitoring and debugging
-
 ## Installation
 
 ```bash
@@ -27,11 +11,68 @@ npm install @krystalmonolith/rx-thread-pool
 - Node.js >= 16.0.0
 - RxJS >= 7.0.0
 
+## A multi-threading framework melding Node.js Worker Threads and RxJS Observables. 
+ - This library aims to provide a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
+ - :exclamation: Multi-threading programming is an advanced skill with significant development risks, 
+ _and should not be applied trivially_.
+ - See the GeeksForGeeks.org discussion 
+[Difference between Multiprogramming, multitasking, multithreading and multiprocessing](https://www.geeksforgeeks.org/operating-systems/difference-between-multitasking-multithreading-and-multiprocessing/)
+for a comparison of multiple execution strategies.
+
+## Acknowledgments
+This project was developed with _significant_ assistance from [Claude](https://claude.ai) (Anthropic).
+
+#### *"ODNT": Old Dogs, New Tricks!*
+
+## Motivation for Developing this Package
+
+- Multi-Threading is a _pain_. Shared Memory. Mutexes. Atomics. Critical Sections. Apartments. :anguished:
+- This started is an _experiment_: Could I solve some issues around sharing data between threads on Node.js using RxJS streams?
+- Java uses streams and it seems to solve some of same issues: See Oracle's documentation on ["Parallelism"](https://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html).
+- In the past I'd worked with functions that took and returned RxJS Observables. Made me think...
+- So I wrote the story [doc/ThreadPool.story.txt](doc/ThreadPool.story.txt) as input to Claude. (Took me 45 minutes.)
+- The key here is the story line:
+`An AbstractThreadTask class is a generic abstract container class for a callback function with signature "threadFunc<T, I extends Observable<T>, V, R extends Observable<V>>(I i, threadId: number):R" .`
+- The result I got from Claude was a little more than I bargained for.. But it looked good so I ran with it.
+
+## Features
+
+- 🚀 **Worker Thread Pool**: Automatically manages thread pool based on available CPU cores
+- 📦 **Type-Safe**: Full TypeScript support with generics
+- 🔄 **RxJS Integration**: Built on RxJS v7 Observables for reactive programming
+- 📋 **FIFO Queue**: Multiple task queues with first-in-first-out execution
+- ⚡ **Parallel Execution**: Execute multiple tasks concurrently across threads
+- 🎯 **Thread Tracking**: Unique thread IDs for monitoring and debugging
+
+## CPUs while performing a 2048x2048 matrix multiplies with different block sizes.
+
+![Task Manager Screenshot of CPUs MultiThreading](screenshot/Screenshot-2025-12-20-083500.png)
+
+## Background: Node.js Worker Threads
+
+ - [Node.js](https://nodejs.org) worker threads, introduced in the `worker_threads` module, provide true parallel
+execution by allowing JavaScript code to run in separate threads, each with its own V8 instance and event loop, while
+sharing the same process memory space. 
+ - Unlike the main event loop which excels at I/O-bound operations, worker threads
+are designed for CPU-intensive tasks like image processing, cryptographic operations, or complex computations that would
+otherwise block the single-threaded event loop and degrade application responsiveness. 
+ - Workers communicate with the main thread and each other through message passing (similar to Web Workers in browsers) using `postMessage()` and event
+listeners, though they can also share memory directly via `SharedArrayBuffer` for more efficient data transfer in
+performance-critical scenarios. 
+ - Each worker runs in isolation with its own global context, meaning they don't share
+variables or closures with the parent thread, but they do share the same process resources like file descriptors. While
+worker threads add valuable parallel processing capabilities to Node.js, they introduce overhead from thread creation
+and message serialization, so they're most beneficial for computationally expensive operations rather than I/O tasks,
+which are already handled efficiently by Node's asynchronous, non-blocking architecture.
+
+
 ## Core Classes
 
-### AbstractThreadTask
+### interface AbstractThreadTask
 
-Abstract base class for creating thread tasks. Contains a callback function that will be executed in a worker thread.
+- Abstract base class for creating thread tasks. 
+- Contains a callback function (threadFunc) that will be executed in a worker thread.
+- See the discussion of [threadFunc](#Thread-Function-Signature) below for more details.
 
 ```typescript
 class AbstractThreadTask<T, I extends Observable<T>, V, R extends Observable<V>>
@@ -43,10 +84,7 @@ class AbstractThreadTask<T, I extends Observable<T>, V, R extends Observable<V>>
 - `V` - Output observable value type
 - `R` - Output observable type
 
-**Methods:**
-- `execute(threadId: number): R` - Execute the thread function with the given thread ID
-
-### ThreadTask
+### class ThreadTask
 
 Concrete implementation of AbstractThreadTask for creating executable tasks.
 
@@ -94,8 +132,18 @@ const result$ = pool.start();
 - Number of threads = `os.availableParallelism()`
 
 **Methods:**
-- `start()` - Start executing all tasks, returns Observable<ThreadResult> or null
+- `start()` - Start executing all tasks, returns Observable\<ThreadResult> or null
+  - `start()` returns a cold "output" RxJS observable.
+  - If `start()` returns a null value an error occurred starting the pool.
+  - The Observable returned by `start()` may also stream error(s).  
+  - NOTHING HAPPENS UNTIL the Observable returned `start()` is subscribed!!!
+  - Once the Observable returned `start()` is subcribed the "input" Observable(s) will be subscribed.
+  - Thread execution **begins** when the "input" Observable associated with the thread's `threadProd` complete!
+  - All threads have completed execution when the Observable returned by `start()` completes.
+  
+
 - `getMaxThreads()` - Get maximum thread count
+  - Number of threads = os.availableParallelism() in the Node.js API
 - `getActiveWorkerCount()` - Get current active worker count
 - `terminateAll()` - Terminate all active workers
 
@@ -164,6 +212,10 @@ const pool = new ThreadPool([queue1, queue2]);
 // Start execution
 const result$ = pool.start();
 
+// result$ contains a cold "output" RxJS observable or null.
+// NOTHING HAPPENS UNTIL $result is subscribed!!!
+// Once $result is subcribed the "input" observable(s) will be subscribed.
+// Thread execution *begins* when the "input" observable(s) complete!
 if (result$) {
   result$.subscribe({
     next: (result) => {
@@ -219,7 +271,7 @@ interface ThreadResult<V> {
 ## Limitations
 
 - Functions passed to workers must be serializable (no closures over external variables)
-- Shared memory via SharedArrayBuffer is not directly supported (use RxJS streams)
+- Shared memory via SharedArrayBuffer is not tested (yet)... Use RxJS streams to avoid race conditions.
 - Worker startup has overhead - better for longer-running tasks
 
 ## Building from Source
