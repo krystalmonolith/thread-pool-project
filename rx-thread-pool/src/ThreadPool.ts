@@ -1,3 +1,5 @@
+// noinspection JSIgnoredPromiseFromCall
+
 import {Worker} from 'worker_threads';
 import {merge, Observable} from 'rxjs';
 import * as os from 'os';
@@ -192,6 +194,7 @@ export class ThreadPool {
    * Terminate all active workers
    */
   terminateAll(): void {
+    // noinspection JSUnusedLocalSymbols
     for (const [threadId, worker] of this.activeWorkers) {
       worker.terminate();
     }

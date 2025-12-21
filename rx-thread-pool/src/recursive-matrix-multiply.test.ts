@@ -64,14 +64,6 @@ function generateMatrix(rows: number, cols: number, max: number = 10): Matrix {
     );
 }
 
-/**
- * Generate identity matrix
- */
-function identityMatrix(size: number): Matrix {
-    return Array.from({length: size}, (_, i) =>
-        Array.from({length: size}, (_, j) => i === j ? 1 : 0)
-    );
-}
 
 /**
  * Simple matrix multiplication (for small matrices and verification)
@@ -92,83 +84,6 @@ function multiplyMatrices(a: Matrix, b: Matrix): Matrix {
     }
 
     return result;
-}
-
-/**
- * Add two matrices
- */
-function addMatrices(a: Matrix, b: Matrix): Matrix {
-    return a.map((row, i) => row.map((val, j) => val + b[i][j]));
-}
-
-/**
- * Split matrix into quadrants
- */
-function splitMatrix(m: Matrix): {
-    topLeft: Matrix;
-    topRight: Matrix;
-    bottomLeft: Matrix;
-    bottomRight: Matrix;
-} {
-    const size = m.length;
-    const mid = Math.floor(size / 2);
-
-    const topLeft: Matrix = [];
-    const topRight: Matrix = [];
-    const bottomLeft: Matrix = [];
-    const bottomRight: Matrix = [];
-
-    for (let i = 0; i < mid; i++) {
-        topLeft.push(m[i].slice(0, mid));
-        topRight.push(m[i].slice(mid));
-    }
-
-    for (let i = mid; i < size; i++) {
-        bottomLeft.push(m[i].slice(0, mid));
-        bottomRight.push(m[i].slice(mid));
-    }
-
-    return {topLeft, topRight, bottomLeft, bottomRight};
-}
-
-/**
- * Combine quadrants into a matrix
- */
-function combineMatrix(
-    topLeft: Matrix,
-    topRight: Matrix,
-    bottomLeft: Matrix,
-    bottomRight: Matrix
-): Matrix {
-    const size = topLeft.length + bottomLeft.length;
-    const result: Matrix = Array.from({length: size}, () => Array(size).fill(0));
-
-    const mid = topLeft.length;
-
-    // Top half
-    for (let i = 0; i < mid; i++) {
-        for (let j = 0; j < mid; j++) {
-            result[i][j] = topLeft[i][j];
-            result[i][j + mid] = topRight[i][j];
-        }
-    }
-
-    // Bottom half
-    for (let i = 0; i < bottomLeft.length; i++) {
-        for (let j = 0; j < mid; j++) {
-            result[i + mid][j] = bottomLeft[i][j];
-            result[i + mid][j + mid] = bottomRight[i][j];
-        }
-    }
-
-    return result;
-}
-
-/**
- * Count operations in matrix multiplication
- */
-function countOperations(rows: number, cols: number, common: number): number {
-    return rows * cols * common;
 }
 
 

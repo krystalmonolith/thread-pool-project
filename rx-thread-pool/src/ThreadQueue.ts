@@ -1,5 +1,6 @@
 import { AbstractThreadTask } from './AbstractThreadTask';
 
+// noinspection JSUnusedGlobalSymbols
 /**
  * FIFO queue for ThreadTask instances
  * Provides methods to enqueue, dequeue, and manage thread tasks
