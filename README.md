@@ -1,23 +1,32 @@
 # @krystalmonolith/rx-thread-pool
 
-## Installation
+[![npm version](https://badge.fury.io/js/%40krystalmonolith%2Frx-thread-pool.svg)](https://www.npmjs.com/package/@krystalmonolith/rx-thread-pool)
 
+## A multi-threading framework melding Node.js Worker Threads and RxJS Observables.
+- This library aims to provide a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
+- :exclamation: Multi-threading programming is an advanced skill with significant development risks,
+  _and should not be applied trivially_.
+- See the GeeksForGeeks.org discussion
+  [Difference between Multiprogramming, multitasking, multithreading and multiprocessing](https://www.geeksforgeeks.org/operating-systems/difference-between-multitasking-multithreading-and-multiprocessing/)
+  for a comparison of multiple execution strategies.
+ 
+## Installation
 ```bash
 npm install @krystalmonolith/rx-thread-pool
 ```
+
+## Repository
+
+https://github.com/krystalmonolith/rx-thread-pool
+
+## Issues
+
+https://github.com/krystalmonolith/rx-thread-pool/issues
 
 ## Requirements
 
 - Node.js >= 16.0.0
 - RxJS >= 7.0.0
-
-## A multi-threading framework melding Node.js Worker Threads and RxJS Observables. 
- - This library aims to provide a clean, type-safe interface for executing CPU-intensive tasks in parallel using Node.js Worker Threads.
- - :exclamation: Multi-threading programming is an advanced skill with significant development risks, 
- _and should not be applied trivially_.
- - See the GeeksForGeeks.org discussion 
-[Difference between Multiprogramming, multitasking, multithreading and multiprocessing](https://www.geeksforgeeks.org/operating-systems/difference-between-multitasking-multithreading-and-multiprocessing/)
-for a comparison of multiple execution strategies.
 
 ## Acknowledgments
 This project was developed with _significant_ assistance from [Claude](https://claude.ai) (Anthropic).
