@@ -8,6 +8,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsc && shx cp src/worker.js dist/worker.js",
+    "pack": "npm run clean && npm run build && npm pack",
+    "publish": "npm run clean && npm run build && npm publish --access public",
     "pretest": "npm run build",
     "test": "node dist/example/example.js",
     "pretest-advanced": "npm run pretest",
@@ -57,8 +59,7 @@
   "files": [
     "dist/**/*",
     "README.md",
-    "LICENSE",
-    "screenshot"
+    "LICENSE"
   ],
   "engines": {
     "node": ">=16.0.0"

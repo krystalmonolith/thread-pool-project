@@ -3,6 +3,7 @@ node_modules/
 
 # Build output
 dist/
+krystalmonolith-rx-thread-pool-*.tgz
 
 # IDE
 .vscode/

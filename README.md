@@ -14,6 +14,10 @@
 ```bash
 npm install @krystalmonolith/rx-thread-pool
 ```
+## Import
+```typescript
+import { ThreadTask, ThreadQueue, ThreadPool } from '@krystalmonolith/rx-thread-pool';
+```
 
 ## Repository
 
