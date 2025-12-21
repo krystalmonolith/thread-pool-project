@@ -7,6 +7,8 @@ import * as path from 'path';
 import {ThreadQueue} from './ThreadQueue';
 import {AbstractThreadTask} from './AbstractThreadTask';
 
+let nextThreadId: number = 1;  // Reserve threadId === 0 as the "null" thread ID.
+
 /**
  * Result emitted by the ThreadPool
  */
@@ -24,7 +26,6 @@ export class ThreadPool {
   private readonly maxThreads: number;
   private readonly threadQueueArray: ThreadQueue[];
   private readonly activeWorkers: Map<number, Worker>;
-  private nextThreadId: number;
 
   /**
    * Constructor for ThreadPool
@@ -38,7 +39,6 @@ export class ThreadPool {
     this.maxThreads = os.availableParallelism();
     this.threadQueueArray = threadQueueArray;
     this.activeWorkers = new Map();
-    this.nextThreadId = 0;
   }
 
   /**
@@ -62,7 +62,7 @@ export class ThreadPool {
 
     // Create a worker thread for each task
     for (const task of allTasks) {
-      const threadId = this.nextThreadId++;
+      const threadId = nextThreadId++;  // Race?
       const observable = this.createWorkerObservable(task, threadId);
       threadObservables.push(observable);
     }
@@ -70,9 +70,9 @@ export class ThreadPool {
     // Up till now this has all been preparation for launching the threads...
     // Threads are finally created here...
     // First merge() subscribes to all the thread(s) output observable(s).
-    // Each thread actually begins execution when it's input observable completes...
+    // Each thread actually begins execution when its input observable completes...
     // Merge collects all thread observable output(s) into one observable.
-    // When the observable returned by merge completes all threads have completed execution.
+    // When the observable returned by merge completes, all threads have completed execution.
     return merge(...threadObservables, this.maxThreads);
   }
 
@@ -135,7 +135,7 @@ export class ThreadPool {
             }
           });
 
-          worker.on('error', (error) => {
+          worker.on('error', (error: Error) => {
             subscriber.next({
               threadId,
               error: error.message,
@@ -145,7 +145,7 @@ export class ThreadPool {
             subscriber.complete();
           });
 
-          worker.on('exit', (code) => {
+          worker.on('exit', (code: number) => {
             if (code !== 0 && this.activeWorkers.has(threadId)) {
               subscriber.next({
                 threadId,
@@ -157,7 +157,7 @@ export class ThreadPool {
             subscriber.complete();
           });
         },
-        error: (error) => {
+        error: (error: any) => {
           subscriber.error(error);
         }
       });
@@ -195,7 +195,7 @@ export class ThreadPool {
    */
   terminateAll(): void {
     // noinspection JSUnusedLocalSymbols
-    for (const [threadId, worker] of this.activeWorkers) {
+    for (const [, worker] of this.activeWorkers) {
       worker.terminate();
     }
     this.activeWorkers.clear();

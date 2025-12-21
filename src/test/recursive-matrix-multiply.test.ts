@@ -112,6 +112,7 @@ function createRecursiveMatrixTask(
                     const rows = a.length;
                     const cols = b[0].length;
                     const common = b.length;
+                    console.log(`[Depth ${task.depth}] Thread ${threadId} calculating ${size}x${size} result`);
                     const result: any[][] = Array.from({length: rows}, () => Array(cols).fill(0));
                     for (let i = 0; i < rows; i++) {
                         for (let j = 0; j < cols; j++) {

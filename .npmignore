@@ -18,3 +18,7 @@ coverage/
 # Misc
 .DS_Store
 *.log
+
+# Project Local
+doc
+archive

@@ -1,12 +1,66 @@
 {
-  "version": "1.1.0",
-  "name": "@krystalmonolith/rx-pool-project-parent",
-  "description": "Reactive Thread Pool Framework",
+  "name": "@krystalmonolith/rx-thread-pool",
+  "version": "1.1.1",
+  "description": "A TypeScript-based multi-threading framework using Worker Threads and RxJS Observables",
+  "homepage": "https://github.com/krystalmonolith/rx-thread-pool",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "postinstall": "cd rx-thread-pool && npm install",
-    "build": "cd rx-thread-pool && npm run build",
-    "test": "cd rx-thread-pool && npm test",
-    "test-advanced": "cd rx-thread-pool && npm run test-advanced"
+    "clean": "rimraf dist",
+    "build": "tsc && shx cp src/worker.js dist/worker.js",
+    "pretest": "npm run build",
+    "test": "node dist/example/example.js",
+    "pretest-advanced": "npm run pretest",
+    "test-advanced": "node dist/example/advanced-example.js",
+    "pretest-recursive-merge": "npm run pretest",
+    "test-recursive-merge": "node dist/test/recursive-merge-sort.test.js",
+    "pretest-recursive-tree": "npm run pretest",
+    "test-recursive-tree": "node dist/test/recursive-tree-traversal.test.js",
+    "pretest-recursive-matrix": "npm run pretest",
+    "test-recursive-matrix": "node dist/test/recursive-matrix-multiply.test.js",
+    "pretest-recursive-matrixfile": "npm run pretest",
+    "test-recursive-matrixfile": "node dist/test/recursive-matrix-multiply.test.js > recursive-matrix-multiply.test.output.log",
+    "pretest-recursive-all": "npm run pretest",
+    "test-recursive-all": "node dist/test/run-all-recursive-tests.js",
+    "pretest-recursive-allfile": "npm run pretest",
+    "test-recursive-allfile": "node dist/test/run-all-recursive-tests.js > run-all-recursive.output.log"
   },
-  "private": true
+  "keywords": [
+    "multithreading",
+    "worker-threads",
+    "rxjs",
+    "observables",
+    "parallel",
+    "concurrency",
+    "thread-pool",
+    "typescript",
+    "recursive",
+    "divide-and-conquer",
+    "parallel-computing",
+    "high-performance"
+  ],
+  "author": "Mark Deazley <mdeazley@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krystalmonolith/thread-pool-project.git"
+  },
+  "dependencies": {
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "rimraf": "^6.1.2",
+    "shx": "^0.4.0",
+    "typescript": "^5.9.3"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE",
+    "screenshot"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
 }
