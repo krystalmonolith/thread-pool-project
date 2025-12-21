@@ -87,7 +87,7 @@ which are already handled efficiently by Node's asynchronous, non-blocking archi
 
 ## Core Classes
 
-### interface [AbstractThreadTask](src/AbstractThreadTask.ts)
+### class [AbstractThreadTask](src/AbstractThreadTask.ts)
 
 - Abstract base class for creating thread tasks. 
 - Contains a callback function (threadFunc) that will be executed in a worker thread.

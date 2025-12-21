@@ -1,6 +1,6 @@
 {
   "name": "@krystalmonolith/rx-thread-pool",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A TypeScript-based multi-threading framework using Worker Threads and RxJS Observables",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
