@@ -1,3 +1,6 @@
+// Returns string timestamp "YYYYMMDD'T'hhmmss"
+// Defaults to current local time.
+
 export const ts = (date: Date = new Date()): string =>
     date.getFullYear() +
     String(date.getMonth() + 1).padStart(2, '0') +

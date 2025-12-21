@@ -1,5 +1,5 @@
 import { Observable, of, map, delay } from 'rxjs';
-import { ThreadTask, ThreadQueue, ThreadPool } from './index';
+import { ThreadTask, ThreadQueue, ThreadPool } from '../index';
 
 // Example 1: Simple computational task
 const computeTask = new ThreadTask(

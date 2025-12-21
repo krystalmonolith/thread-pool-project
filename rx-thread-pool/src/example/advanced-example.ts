@@ -1,5 +1,5 @@
 import {map, Observable, of} from 'rxjs';
-import {ThreadPool, ThreadQueue, ThreadTask} from './index';
+import {ThreadPool, ThreadQueue, ThreadTask} from '../index';
 
 console.log('=== Advanced Multi-Threading Framework Examples ===\n');
 

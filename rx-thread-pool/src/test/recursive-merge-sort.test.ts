@@ -1,5 +1,5 @@
 import {mergeMap, Observable, of} from 'rxjs';
-import {ThreadPool, ThreadQueue, ThreadTask} from './index';
+import {ThreadPool, ThreadQueue, ThreadTask} from '../index';
 
 console.log('=== Recursive Parallel Merge Sort Test ===\n');
 

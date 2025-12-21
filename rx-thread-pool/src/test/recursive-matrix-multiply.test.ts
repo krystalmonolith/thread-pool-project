@@ -1,6 +1,6 @@
 import * as fs from 'node:fs'
 import {mergeMap, Observable, of} from 'rxjs';
-import {ThreadPool, ThreadQueue, ThreadTask} from './index';
+import {ThreadPool, ThreadQueue, ThreadTask} from '../index';
 import {ts} from "./timestamp";
 
 const CSV_OUTPUT_FILE_NAME_SUFFIX = "-recursive-matrix-multiply.csv";
